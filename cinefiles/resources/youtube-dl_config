@@ -1,0 +1,48 @@
+#youtube-dl user config
+
+#Retry 100 times
+-R 100
+
+# Retry infinite times
+# -R infinite
+
+# force wget instead
+--external-downloader wget
+
+# wget arguments
+--external-downloader-args "-c"
+
+# Display progress in console titlebar
+--console-title
+
+# Do NOT contact the youtube-dl server for debugging
+--no-call-home
+
+# verbose
+#--verbose
+ 
+# If a merge is required (e.g. bestvideo+bestaudio), output to given container format. 
+# One of mkv, mp4, ogg, webm, flv. Ignored if no merge is required
+--merge-output-format mkv
+
+# Download best format available
+#-f '(bestvideo+bestaudio/best)'
+-f '(best)'
+
+# Encode the video to another format if necessary (currently supported: mp4|flv|ogg|webm|mkv|avi)
+#--recode-video mp4
+
+# Write metadata to the video file
+--add-metadata
+
+# Embed thumbnail in the audio as cover art
+--embed-thumbnail
+
+# In some cases, you don't want special characters such as 中, spaces, or &, In these 
+# cases, add the --restrict-filenames flag to get a shorter title:
+#--restrict-filenames
+
+# Format the output name: 
+# The current default template is %(title)s-%(id)s.%(ext)s
+#-o '%(title)s (%(resolution)s).%(ext)s'
+-o '%(title)s - %(uploader)s (%(resolution)s).%(ext)s' 

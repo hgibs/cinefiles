@@ -1,0 +1,6 @@
+requests > 2.4.3
+imdbparser > 1.0.3
+youtube_dl > 2017.2.17
+guessit > 2.1.1
+langdetect > 1.0.7
+selenium >= 2.33.0

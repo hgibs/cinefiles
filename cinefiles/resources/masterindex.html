@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>Index of&nbsp;$%{headertitle}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="$%{cf_res}/main.css" />
+  <script type="text/javascript" src="$%{cf_res}/jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="$%{cf_res}/jquery.tablesorter.min.js"></script>
+	<script>
+    $(document).ready(function() {
+      jQuery(function($) {
+        $("#maintable").tablesorter({headers: { 0:{sorter: false}}, widgets: ['zebra']});
+      });
+    });
+	</script>
+</head>
+
+<body>
+<!-- Wrapper -->
+  <div id="wrapper">
+    <!-- Sortable Table -->
+    <table class="tablesorter" id="maintable" cellpadding="0" cellspacing="0">
+      <thead>
+        <tr>
+          <th class="unsortable">Poster</th>
+          <th>Title</th>
+          <th class="minspace">Year</th>
+          <th class="minspace">Runtime</th>
+          <th>Roger Ebert Rating</th>
+          <th>IMDB User Rating</th>
+          <th>Rotten Tomatoes</th>
+          <th class="minspace">Metacritic</th>
+        </tr>
+      </thead>
+      $%{table_rows}
+    </table>
+  </div>
+  <footer><a href="https://github.com/hgibs/cinefiles">Thank you for using 'Cinefiles'</a></footer>
+</body>
+</html>
