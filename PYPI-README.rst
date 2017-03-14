@@ -3,6 +3,8 @@
 cinefiles
 ============
 
+.. image:: https://travis-ci.org/hgibs/cinefiles.svg?branch=master
+
 Organizes, indexes, and pulls relevant info for your movie library presented in a clean, locally-resourced, set of webpages.
 
 Installation
