@@ -37,7 +37,7 @@ Installation
 Usage
 -----
 
-Downloading to appropriaatly named folders (each folder’s name is the name of the movie it holds) NOTE: Folders can contain subfolders with movies in them i.e. =&gt; “James Bond Movies/Goldeneye”
+Downloading to appropriatly named folders (each folder’s name is the name of the movie it holds) NOTE: Folders can contain subfolders with movies in them i.e. =&gt; “James Bond Movies/Goldeneye”
 
     import cinefiles as cf
     directory = "/Volumes/HDD/Movies"
