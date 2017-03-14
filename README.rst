@@ -12,6 +12,7 @@ Installation
 
 Mac OS X
 --------
+
 ::
 
     brew update
@@ -22,6 +23,7 @@ Linux
 -----
 
 ::
+
     sudo apt-get update
     sudo apt-get install phantomjs
 
@@ -102,6 +104,7 @@ To remove all the added files:
 ==============================
 
 ::
+
     import cinefiles as cf
     clear_run = cf.Cinefiles(configfile='cinefiles.ini')
     clear_run.clear_run.purgecinefiles()
