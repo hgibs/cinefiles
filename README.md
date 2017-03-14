@@ -9,8 +9,8 @@ cinefiles
 
 [![Travis CI](https://travis-ci.org/hgibs/cinefiles.svg?branch=master)](https://travis-ci.org/hgibs/cinefiles)
 
-[![pypi version](https://img.shields.io/pypi/v/changes.svg)](https://pypi.python.org/pypi/changes)
-[![# of downloads](https://img.shields.io/pypi/dw/changes.svg)](https://pypi.python.org/pypi/changes)
+[![pypi version](https://img.shields.io/pypi/v/cinefiles.svg)](https://pypi.python.org/pypi/cinefiles)
+[![# of downloads](https://img.shields.io/pypi/dm/cinefiles.svg)](https://pypi.python.org/pypi/cinefiles)
 
 
 Organizes, indexes, and pulls relevant info for your movie library presented in a clean, locally-resourced, set of webpages.
@@ -37,7 +37,7 @@ Installation
 Usage
 -----
 
-Downloading to appropriaatly named folders (each folder’s name is the name of the movie it holds) NOTE: Folders can contain subfolders with movies in them i.e. =&gt; “James Bond Movies/Goldeneye”
+Downloading to appropriatly named folders (each folder’s name is the name of the movie it holds) NOTE: Folders can contain subfolders with movies in them i.e. =&gt; “James Bond Movies/Goldeneye”
 
     import cinefiles as cf
     directory = "/Volumes/HDD/Movies"
