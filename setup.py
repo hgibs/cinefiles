@@ -13,7 +13,7 @@ from os import path
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
-with open(path.join(here, 'PIPI-README.rst'), encoding='utf-8') as f:
+with open(path.join(here, 'PYPI-README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
@@ -72,7 +72,7 @@ setup(
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
 #     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
-    packages=['cinefiles','cinefolders'],
+    packages=['cinefiles'],
 
     # Alternatively, if you want to distribute just a my_module.py, uncomment
     # this:
@@ -115,8 +115,4 @@ setup(
 #         ],
 #     },
 )
-
-    Contact GitHub API Training Shop Blog About 
-
-    © 2017 GitHub, Inc. Terms Privacy Security Status Help 
 
