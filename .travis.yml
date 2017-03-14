@@ -1,6 +1,7 @@
 os:
+# osx tests queue for a long time
   - linux
-  - osx
+#  - osx
 sudo: required
 language: python
 python:
