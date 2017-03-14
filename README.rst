@@ -7,26 +7,31 @@ Organizes, indexes, and pulls relevant info for your movie library presented in 
 Installation
 ============
 
+1) Install `PhantomJS <http://phantomjs.org/>`_
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Mac OS X
+--------
+::
+
+    brew update
+    brew install phantomjs
+    
+    
+Linux
+-----
+
+::
+    sudo apt-get update
+    sudo apt-get install phantomjs
+
+2) Install cinefiles
+^^^^^^^^^^^^^^^^^^^^
+
 ::
 
     pip install cinefiles
     
-
-Installation on OS X
-====================
-cinefiles utilizes ghost.py which requires qt bindings
-
-::
-
-    brew install qt
-    mkvirtualenv foo
-    pip install -U pip  # make sure pip is current
-    pip install PySide #only supports python 2.6-7 and 3.2-4
-    pyside_postinstall.py -install
-    pip install Ghost.py
-    
-    pip install cinefiles
-
 
 Usage
 =====
@@ -72,6 +77,7 @@ Movies/
         
         
 ... to have a structure like this:
+
 Movies/
     index.htm
     Down Periscope/
