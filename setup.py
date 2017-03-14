@@ -87,7 +87,7 @@ setup(
                         'youtube_dl>=2017.2.17',
                         'guessit<3,>=2.1.1',
                         'langdetect<2,>=1.0.7',
-                        'selenium<2,>=3.0.2',
+                        'selenium<4,>=3.0.2',
     ],
 
     # List additional groups of dependencies here (e.g. development
