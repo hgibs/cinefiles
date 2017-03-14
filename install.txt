@@ -1,2 +1,0 @@
-pip install requests, imdbparser, youtube_dl, guessit, langdetect
-brew install phantomjs
