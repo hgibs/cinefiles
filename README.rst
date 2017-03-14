@@ -62,49 +62,43 @@ To rename folders automatically:
 
 What does cinefiles actually do:
 ================================
+
 cinefiles updates this folder...
 
-Movies/
-    Down Periscope/
-        movie.mp4
-    Grand Budapest Hotel (2014)/
-        somecrazyunrelatedname.mkv
-    Mulan (1998)/
-        mulan.mp4
-    Pirate Movies/
-        Pirates of the Caribbean At Worlds End/
-            worldsend.mov
-        Pirates of the Caribbean The Curse of the Black Pearl/
-            blackpearl.mpv
+- Movies/
+    - Down Periscope/
+        - movie.mp4
+    - Grand Budapest Hotel (2014)/
+        - somecrazyunrelatedname.mkv
+    - Mulan (1998)/
+        - mulan.mp4
+    - Pirate Movies/
+        - Pirates of the Caribbean At Worlds End/
+            - worldsend.mov
+        - Pirates of the Caribbean The Curse of the Black Pearl/
+            - blackpearl.mpv
         
         
 ... to have a structure like this:
 
-Movies/
-    index.htm    
-    
-    Down Periscope/
-        index.htm
-        movie.mp4
-        
-    Grand Budapest Hotel (2014)/
-        index.htm
-        somecrazyunrelatedname.mkv
-        
-    Mulan (1998)/
-        index.htm
-        mulan.mp4
-        
-    Pirate Movies/
-    
-    
-        Pirates of the Caribbean At Worlds End/
-            index.htm
-            worldsend.mov
-            
-        Pirates of the Caribbean The Curse of the Black Pearl/
-            index.htm
-            blackpearl.mpv
+- Movies/
+    - index.htm    
+    - Down Periscope/
+        - index.htm
+        - movie.mp4
+    - Grand Budapest Hotel (2014)/
+        - index.htm
+        - somecrazyunrelatedname.mkv
+    - Mulan (1998)/
+        - index.htm
+        - mulan.mp4   
+    - Pirate Movies/
+        - Pirates of the Caribbean At Worlds End/
+            - index.htm
+            - worldsend.mov
+        - Pirates of the Caribbean The Curse of the Black Pearl/
+            - index.htm
+            - blackpearl.mpv
 
 
 To remove all the added files:
@@ -120,23 +114,22 @@ To remove all the added files:
     
 What does cinefolders actually do:
 ================================
+
 cinefiles updates this folder...
 
-Movies/
-    Manchester.by.the.Sea.2016.DVDScr.XVID.AC3.HQ.Hive-CM8.mkv
-    
-    mulan.mp4
-    
-    men who stare at goats, the.mp4
+- Movies/
+    - Manchester.by.the.Sea.2016.DVDScr.XVID.AC3.HQ.Hive-CM8.mkv
+    - mulan.mp4
+    - men who stare at goats, the.mp4
 
 ... to this!
 
 Movies/
-    Manchester by the Sea (2016)/
-        Manchester.by.the.Sea.2016.DVDScr.XVID.AC3.HQ.Hive-CM8.mkv
-    Mulan (1984)/
-        mulan.mp4
-    Men who stare at goats, The/ 
-        the_men_who_stare_at_goats.mp4
+    - Manchester by the Sea (2016)/
+        - Manchester.by.the.Sea.2016.DVDScr.XVID.AC3.HQ.Hive-CM8.mkv
+    - Mulan (1984)/
+        - mulan.mp4
+    - Men who stare at goats, The/ 
+        - the_men_who_stare_at_goats.mp4
         
 Which can conveniently then be properly parsed by cinefiles!
