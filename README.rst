@@ -82,21 +82,27 @@ Movies/
 
 Movies/
     index.htm
+    
     Down Periscope/
         index.htm
+        
         movie.mp4
     Grand Budapest Hotel (2014)/
         index.htm
+        
         somecrazyunrelatedname.mkv
     Mulan (1998)/
         index.htm
+        
         mulan.mp4
     Pirate Movies/
         Pirates of the Caribbean At Worlds End/
             index.htm
+            
             worldsend.mov
         Pirates of the Caribbean The Curse of the Black Pearl/
             index.htm
+            
             blackpearl.mpv
 
 
