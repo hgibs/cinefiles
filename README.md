@@ -1,8 +1,7 @@
-<span style="color:red">
+```diff
+- Still under development!
+```
 
-Still in development!
---------
-</span>
 
 cinefiles
 =========
