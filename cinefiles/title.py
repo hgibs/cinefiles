@@ -144,6 +144,7 @@ class Title:
         self.driver = webdriver.PhantomJS(
                 port=0, 
                 desired_capabilities={
+                    'user-agent':'Mozilla/5.0 PhantomJS cinefiles',
                     'javascriptEnabled': True, 
                     'platform': 'ANY', 
                     'browserName': 'phantomjs', 
@@ -500,7 +501,7 @@ class Title:
                 
             
                 print(".", end='', flush=True)
-                logging.debug('Fetched with ghost driver '+url)
+                logging.debug('Fetched with driver '+url)
 
                 postertree = html.fromstring(self.driver.page_source) 
                 imglist = postertree.xpath('//img[@class="pswp__img"]')
