@@ -3,6 +3,7 @@ include *.txt
 include LICENSE 
 include .travis.yml 
 include *.md
+include *.py
 recursive-include cinefiles *.css
 recursive-include cinefiles *.html
 recursive-include cinefiles *.js
