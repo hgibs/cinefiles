@@ -128,4 +128,7 @@ Movies/
 
 Which can conveniently then be properly parsed by cinefiles!
 
+--------------------
+
   [PhantomJS]: http://phantomjs.org/
+[<img src="https://www.themoviedb.org/assets/static_cache/ef94b9673bbf5f1290718772d546bc30/images/v4/logos/powered-by-square-blue.svg" height="100" width="98">](https://www.themoviedb.org/)
