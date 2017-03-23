@@ -1,0 +1,205 @@
+{
+  "Heading" : "Pride and Prejudice and Zombies",
+  "AbstractSource" : "Wikipedia",
+  "AbstractURL" : "https:\/\/en.wikipedia.org\/wiki\/Pride_and_Prejudice_and_Zombies",
+  "DefinitionSource" : "",
+  "Image" : "https:\/\/duckduckgo.com\/i\/55b10ef3.jpg",
+  "Answer" : "",
+  "Definition" : "",
+  "Type" : "A",
+  "ImageIsLogo" : 0,
+  "Infobox" : {
+    "content" : [
+      {
+        "data_type" : "string",
+        "value" : "Seth Grahame-Smith and Jane Austen",
+        "label" : "Author",
+        "sort_order" : "1",
+        "wiki_order" : 0
+      },
+      {
+        "data_type" : "string",
+        "value" : "April 1, 2009 Quirk Books, Philadelphia",
+        "label" : "Published",
+        "sort_order" : "9",
+        "wiki_order" : 3
+      },
+      {
+        "data_type" : "string",
+        "value" : "Sense and Sensibility and Sea Monsters",
+        "label" : "Followed by",
+        "sort_order" : "13",
+        "wiki_order" : 6
+      }
+    ],
+    "meta" : [
+      {
+        "value" : "Pride and Prejudice and Zombies",
+        "data_type" : "string",
+        "label" : "article_title"
+      },
+      {
+        "value" : "infobox book",
+        "data_type" : "string",
+        "label" : "template_name"
+      },
+      {
+        "value" : "First Edition Cover, 2009",
+        "data_type" : "string",
+        "label" : "caption"
+      },
+      {
+        "value" : "book",
+        "data_type" : "string",
+        "label" : "formatting_rules"
+      }
+    ]
+  },
+  "Abstract" : "Pride and Prejudice and Zombies is a 2009 parody novel by Seth Grahame-Smith. It is a mashup combining Jane Austen's classic novel Pride and Prejudice with elements of modern zombie fiction, crediting Austen as co-author. It was first published in April 2009 by Quirk Books and in October 2009 a Deluxe Edition was released, containing full-color images and additional zombie scenes. The novel was adapted into a 2016 film starring Lily James and Sam Riley.",
+  "Entity" : "book",
+  "meta" : {
+    "attribution" : null,
+    "description" : "Wikipedia",
+    "js_callback_name" : "wikipedia",
+    "status" : "live",
+    "dev_date" : null,
+    "topic" : [
+      "productivity"
+    ],
+    "is_stackexchange" : null,
+    "src_id" : 1,
+    "src_options" : {
+      "src_info" : "",
+      "skip_image_name" : 0,
+      "directory" : "",
+      "skip_end" : "0",
+      "is_wikipedia" : 1,
+      "min_abstract_length" : "20",
+      "is_fanon" : 0,
+      "language" : "en",
+      "skip_icon" : 0,
+      "source_skip" : "",
+      "skip_abstract" : 0,
+      "skip_abstract_paren" : 0,
+      "skip_qr" : "",
+      "is_mediawiki" : 1
+    },
+    "unsafe" : 0,
+    "designer" : null,
+    "created_date" : null,
+    "blockgroup" : null,
+    "tab" : "About",
+    "src_url" : null,
+    "maintainer" : {
+      "github" : "duckduckgo"
+    },
+    "name" : "Wikipedia",
+    "repo" : "fathead",
+    "id" : "wikipedia_fathead",
+    "dev_milestone" : "live",
+    "live_date" : null,
+    "example_query" : "nikola tesla",
+    "src_domain" : "en.wikipedia.org",
+    "src_name" : "Wikipedia",
+    "perl_module" : "DDG::Fathead::Wikipedia",
+    "producer" : null,
+    "signal_from" : "wikipedia_fathead",
+    "production_state" : "online",
+    "developer" : [
+      {
+        "url" : "http:\/\/www.duckduckhack.com",
+        "name" : "DDG Team",
+        "type" : "ddg"
+      }
+    ]
+  },
+  "AnswerType" : "",
+  "ImageHeight" : 200,
+  "DefinitionURL" : "",
+  "RelatedTopics" : [
+    {
+      "Icon" : {
+        "URL" : "",
+        "Height" : "",
+        "Width" : ""
+      },
+      "FirstURL" : "https:\/\/duckduckgo.com\/Sense_and_Sensibility_and_Sea_Monsters",
+      "Result" : "<a href=\"https:\/\/duckduckgo.com\/Sense_and_Sensibility_and_Sea_Monsters\">Sense and Sensibility and Sea Monsters<\/a> - Sense and Sensibility and Sea Monsters is a parody novel by Ben H. Winters, with Jane Austen credited as co-author. It is a mashup story containing elements from Jane Austen's 1811 novel Sense and Sensibility and common tropes from sea monster stories.",
+      "Text" : "Sense and Sensibility and Sea Monsters - Sense and Sensibility and Sea Monsters is a parody novel by Ben H. Winters, with Jane Austen credited as co-author. It is a mashup story containing elements from Jane Austen's 1811 novel Sense and Sensibility and common tropes from sea monster stories."
+    },
+    {
+      "Icon" : {
+        "URL" : "",
+        "Height" : "",
+        "Width" : ""
+      },
+      "FirstURL" : "https:\/\/duckduckgo.com\/c\/Novels_based_on_Pride_and_Prejudice",
+      "Result" : "<a href=\"https:\/\/duckduckgo.com\/c\/Novels_based_on_Pride_and_Prejudice\">Novels based on Pride and Prejudice<\/a>",
+      "Text" : "Novels based on Pride and Prejudice"
+    },
+    {
+      "Icon" : {
+        "URL" : "",
+        "Height" : "",
+        "Width" : ""
+      },
+      "FirstURL" : "https:\/\/duckduckgo.com\/c\/Quirk_Books_books",
+      "Result" : "<a href=\"https:\/\/duckduckgo.com\/c\/Quirk_Books_books\">Quirk Books books<\/a>",
+      "Text" : "Quirk Books books"
+    },
+    {
+      "Icon" : {
+        "URL" : "",
+        "Height" : "",
+        "Width" : ""
+      },
+      "FirstURL" : "https:\/\/duckduckgo.com\/c\/Zombie_novels",
+      "Result" : "<a href=\"https:\/\/duckduckgo.com\/c\/Zombie_novels\">Zombie novels<\/a>",
+      "Text" : "Zombie novels"
+    },
+    {
+      "Icon" : {
+        "URL" : "",
+        "Height" : "",
+        "Width" : ""
+      },
+      "FirstURL" : "https:\/\/duckduckgo.com\/c\/Parody_novels",
+      "Result" : "<a href=\"https:\/\/duckduckgo.com\/c\/Parody_novels\">Parody novels<\/a>",
+      "Text" : "Parody novels"
+    },
+    {
+      "Icon" : {
+        "URL" : "",
+        "Height" : "",
+        "Width" : ""
+      },
+      "FirstURL" : "https:\/\/duckduckgo.com\/c\/American_comedy_novels",
+      "Result" : "<a href=\"https:\/\/duckduckgo.com\/c\/American_comedy_novels\">American comedy novels<\/a>",
+      "Text" : "American comedy novels"
+    },
+    {
+      "Icon" : {
+        "URL" : "",
+        "Height" : "",
+        "Width" : ""
+      },
+      "FirstURL" : "https:\/\/duckduckgo.com\/c\/19th-century_American_novels",
+      "Result" : "<a href=\"https:\/\/duckduckgo.com\/c\/19th-century_American_novels\">19th-century American novels<\/a>",
+      "Text" : "19th-century American novels"
+    },
+    {
+      "Icon" : {
+        "URL" : "",
+        "Height" : "",
+        "Width" : ""
+      },
+      "FirstURL" : "https:\/\/duckduckgo.com\/c\/Works_published_under_a_pseudonym",
+      "Result" : "<a href=\"https:\/\/duckduckgo.com\/c\/Works_published_under_a_pseudonym\">Works published under a pseudonym<\/a>",
+      "Text" : "Works published under a pseudonym"
+    }
+  ],
+  "Results" : [],
+  "AbstractText" : "Pride and Prejudice and Zombies is a 2009 parody novel by Seth Grahame-Smith. It is a mashup combining Jane Austen's classic novel Pride and Prejudice with elements of modern zombie fiction, crediting Austen as co-author. It was first published in April 2009 by Quirk Books and in October 2009 a Deluxe Edition was released, containing full-color images and additional zombie scenes. The novel was adapted into a 2016 film starring Lily James and Sam Riley.",
+  "ImageWidth" : 129,
+  "Redirect" : ""
+}

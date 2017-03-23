@@ -23,13 +23,17 @@ from langdetect import detect as detect_language
 
 
 # from . import ydlhandlers as ydlhs
-from . import templatex, cinefiles
+from . import templatex, cinefiles, search
+
+from . import tmdb
 
 # print(dir(Cinefiles))
 
 
 class Title:  
-    def __init__(self, folderstr, movie, caller=None, configdict={}):
+    TMDB_API_KEY = 'beb6b398540ccc4245a5b4739186a0bb'
+
+    def __init__(self, folderstr, moviefile, caller=None, configdict={}):
         logging.info("Parsing "+folderstr)
         
         self.suffix_match = {'image/jpeg':'jpg','image/png':'png','image/bmp':'bmp',
@@ -42,7 +46,7 @@ class Title:
         else:
             self.higher = caller
         
-        self.movie = movie
+        self.moviefile = moviefile
         self.folderpath = folderstr
         self.configs = configdict
         
@@ -120,6 +124,8 @@ class Title:
             +'# components have been downloaded. If you delete this \n'
             +'# file, then Cinefiles().run() will re-download and \n'
             +'# index this folder.\n')
+            
+        self.searchfunction=self.duckduckgo
         
         
     def prephtml(self):
@@ -198,8 +204,19 @@ class Title:
           logging.error('Did not purge files, destroy-flag not set to '
                         +'True')
 
-
-
+    def omdbsearch(self):
+        self.omdbdata = {}
+        try:
+            baseurl = 'http://www.omdbapi.com/?'
+            query = parse.urlencode({   'i':self.movie.imdb_id,
+                                        'tomatoes':'true',})
+            fullurl = baseurl+query
+            req = requests.get(fullurl)
+            print('.',end='',flush=True)
+            data = json.loads(req.text)
+            self.omdbdata = data
+        except Exception as err:
+            logging.error("Error fetching OMDb info: "+str(err))
 
     ####################
     # Trailer download #
@@ -335,24 +352,7 @@ class Title:
 
     #Roger ebert info scrape
     def getrogerebertinfo(self):
-        self.rogereberthref = ''
-        query = parse.urlencode({'q':self.ftitle+" site:www.rogerebert.com"})
-        ## because screw using the API and it's limits
-        googlereq = requests.get("https://www.google.com/search?"+query)
-        print(".", end='', flush=True)
-        logging.debug('Fetched '+googlereq.url)
-
-        if(googlereq.status_code == requests.codes.ok):
-            tree = html.fromstring(googlereq.content)
-
-#             links = tree.xpath('//cite')
-            links = tree.xpath('//div/h3[@class="r"]/a')
-            findlink = links[0].attrib['href']
-            findlink = findlink.split('?q=')[-1]
-            findlink = findlink.split('&')[0]
-            self.rogereberthref = findlink
-#             self.rogereberthref = 'http://'+links[0].text_content()
-#         logging.debug(self.rogereberthref)
+        self.rogereberthref = self.higher.rogersearchengine.get_link(self.movie.ftitle)
         if(self.rogereberthref.find("www.rogerebert.com/reviews")>=0):
             ##scrape his review page
             rogerreq = requests.get(self.rogereberthref.replace(' ',''))
@@ -410,77 +410,39 @@ class Title:
     def rottentomatoes(self):
         # 43% (69/161)
         self.rottenhtml = ''
-        self.rottenhref = 'https://www.rottentomatoes.com/m/'
-
+        self.rottenhref = self.omdbdata['tomatoURL']
         self.rottenrating = 'None'
-
-        query = parse.urlencode({'q':self.ftitle+" site:www.rottentomatoes.com"})
-        rottengreq = requests.get("https://www.google.com/search?"+query)
+        
+        rottenreq = requests.get(self.rottenhref)
         print(".", end='', flush=True)
-        logging.debug('Fetched '+rottengreq.url)
+        logging.debug('Fetched '+rottenreq.url)
 
-        if(rottengreq.ok):
-          gtree = html.fromstring(rottengreq.content)
-          links = gtree.xpath('//div[@class="kv"]/cite')
-          self.rottenhref += links[0].text_content().split('/')[-2]
-  
-        #       logging.debug(self.rottenhref)
-          rottenreq = requests.get(self.rottenhref.replace(' ',''))
-          print(".", end='', flush=True)
-          logging.debug('Fetched '+rottenreq.url)
-  
-          if(rottenreq.ok):
+        if(rottenreq.ok):
             tree = html.fromstring(rottenreq.content)
             percentage = tree.xpath('//a[@id="tomato_meter_link"]/span')
             self.rottenhtml += percentage[1].text_content()
             self.rottenrating = percentage[1].text_content()
             scorestats = tree.xpath('//div[@id="scoreStats"]/div[@class="superPageFontColor"]')
-  
+
             fresh = scorestats[2].text_content().replace('\n','').replace('\t','').strip()
             fresh = fresh[fresh.find(':')+1:].strip()
             self.rottenhtml += ' ('+fresh+'/'
-  
+
             numscored = scorestats[1].text_content().replace('\n','').replace('\t','').strip()
             numstr = numscored[numscored.find(':')+1:].strip()
             self.rottenhtml += numscored[numscored.find(':')+2:]+')'
-          else:
+        else:
             self.rottenhtml = "The 'tomatometer' couldn't be found."
-        else:
-          self.rottenhtml = "The rotten tomatoes link couldn't be found."
 
-    # Get the metacritic off IMDB
+    # Get the metacritic off OMDb
     def metacritic(self):
+        #http://www.metacritic.com/search/all/pride+and+prejudice+and+zombies/results
         self.metacritichtml = ''
-        self.metarating = 'None'
-        #     45 (Based on 34 critic reviews provided by Metacritic.com)
-        imdblink = 'http://www.imdb.com/title/tt'+self.movie.imdb_id+'/criticreviews'
-        metareq = requests.get(imdblink)
-        print(".", end='', flush=True)
-        logging.debug('Fetched '+metareq.url)
-
-        if(metareq.ok):
-        #       logging.debug(str(dir(metareq)))
-            metatree = html.fromstring(metareq.content)
-            nocontent = metatree.xpath('//div[@id="main"]/div[@class="article"]/span[id="noContent"]')
-
-            rating = metatree.xpath('//div[@class="metascore_wrap"]/div/span[@itemprop="ratingValue"]')
-            reviewcount=metatree.xpath('//div[@class="metascore_block"]/span[@itemprop="ratingCount"]')
-  
-#             logging.debug(str(len(nocontent))+'-'+str(len(rating))+'-'+str(len(reviewcount)))
-  
-            if(len(nocontent)==0 and len(rating)>0 and len(reviewcount)>0):
-            #       Yay we found some reviews
-                self.metacritichtml+= rating[0].text
-                self.metarating = rating[0].text
-                self.metacritichtml+=" (Based on "
-                reviewcount=metatree.xpath('//div[@class="metascore_block"]/span[@itemprop="ratingCount"]')
-                self.metacritichtml+=reviewcount[0].text
-                self.metacritichtml+=" critic reviews provided by <a href='"+imdblink+"'>Metacritic.com</a>)"
-            else:
-                # no metacritic :(
-                self.metacritichtml = "No Metacritic information is available." 
+        if('Metascore' in self.omdbdata.keys()):
+            self.metacritichtml = self.omdbdata['Metascore']
         else:
-          logging.error('Bad response on metacritic scrape'+str(metareq))
+            logging.debug("No metacritic key from OMDb")
+            
 
 
 

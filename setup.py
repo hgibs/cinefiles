@@ -88,6 +88,8 @@ setup(
                         'guessit<3,>=2.1.1',
                         'langdetect<2,>=1.0.7',
                         'selenium<4,>=3.0.2',
+                        'pycountry<18,>=17.0.0',
+                        'google-api-python-client',
     ],
 
     # List additional groups of dependencies here (e.g. development

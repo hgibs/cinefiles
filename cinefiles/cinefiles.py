@@ -8,8 +8,6 @@ import logging
 import filecmp
 import configparser
 from time import strftime
-from imdbparser import IMDb
-#from PIL import Image # pip3 install pillow
 import tkinter as tk #GUI options
 from shutil import copy2, rmtree
 import filecmp, mimetypes
@@ -23,9 +21,12 @@ from platform import system
 ### aren't instantiating it for every movie poster
 
 
-from . import title, templatex
+from . import title, templatex, tmdb, googlesearch
     
 class Cinefiles:
+    
+    TMDB_API_KEY = 'beb6b398540ccc4245a5b4739186a0bb'
+    
 
     def __init__(self, *args, **kwargs):
         
@@ -36,7 +37,8 @@ class Cinefiles:
                             'destroy':False,
                             'debugnum':logging.INFO,
                             'localresources':True,
-                            'searchfolder':''}
+                            'searchfolder':'',
+                            'def_lang':'en',}
                                                 
         self.matches = []
         self.choices = []
@@ -97,12 +99,18 @@ class Cinefiles:
                 self.allowedvideoextensions.append(ext)
                 
         self.onceprintentry=None
+        
+        self.tmdb = TMDb(TMDB_API_KEY,self.configdict['def_lang'])
+        
+        self.rogersearchengine = GoogleSearch()
 
     #####################
     # The init and prep #
     #####################
     
     def readconfigfile(self, file):
+    
+        #TODO: add region 'US' input
         config = configparser.ConfigParser()
         
         if os.path.exists(file):
@@ -258,8 +266,6 @@ class Cinefiles:
     #################################
 
     def run(self):
-        #init IMDb
-        self.imdb = IMDb()
         
         logging.info(strftime('Starting Cinefiles run at %d %b %Y %X'))
         logging.info("Search folder is: "+self.configdict['searchfolder'])
@@ -376,10 +382,10 @@ class Cinefiles:
         else:
             title = en.name
         
-        search = self.imdb.search_movie(title)
-        search.fetch()
+        searchresults = self.tmdb.search(title)
+        
         print('"'+title+'" ', end='', flush=True)
-        if(len(search.results)==0):
+        if(len(searchresults)==0):
             #couldn't find a match :(
 #               self.nomatch(en)
             if(newname!=''):
@@ -387,13 +393,12 @@ class Cinefiles:
                              ' no matches!!')
                 return False
             self.nomatch(en)
-        elif(len(search.results)==1):
+        elif(len(searchresults)==1):
             #we got a direct match!
-            self.addmatch(en, search.results[0])
+            self.addmatch(en, searchresults[0])
             logging.info('Found '+en.name)
             print('Found!')
-#               self.match(en, search.results[0])
-        elif(len(search.results)>1):
+        elif(len(searchresults)>1):
             #uh oh, multiple found
             print("Multiple matches found", end='', flush=True)
             if(self.configdict['skip']):
@@ -401,9 +406,9 @@ class Cinefiles:
                 logging.info(file.name+" SKIPPED - too many results")
             elif(self.configdict['guess']):
                 print(" making best guess.")
-                self.addmatch(en, search.results[0])
+                self.addmatch(en, searchresults[0])
             else:
-                self.addchoice(en, search.results)
+                self.addchoice(en, searchresults)
                 print('')
         return True
 
@@ -478,7 +483,7 @@ class Cinefiles:
             self.selvar = tk.StringVar()
             label = tk.Label(self.popup, text=(
                     "More than one movie was found matching the "
-                    +"movie title in IMDb, please select the "
+                    +"movie title in TMDb, please select the "
                     +"correct one:"))
             label.pack()
         
@@ -504,13 +509,11 @@ class Cinefiles:
     
             first = True
             for movie in results:
-    #                   movie.fetch()
-    #                   radiotxt = movie.title+" ("+str(movie.year)+") "+movie.plot
                 radiotxt = movie.title+" ("+str(movie.year)+")"
                 radiobtn = tk.Radiobutton(  self.popup, 
                                             text=radiotxt, 
                                             variable=self.selvar, 
-                                            value=movie.imdb_id)
+                                            value=movie.id)
                 radiobtn.pack()
                 if(first):
                     first=False
@@ -555,7 +558,7 @@ class Cinefiles:
                 +'<td>$%{year}</td>'
                 +'<td>$%{runtime}</td>'
                 +'<td>$%{roger}</td>'
-                +'<td>$%{imdb}</td>'
+                +'<td>$%{tmdb}</td>'
                 +'<td>$%{rotten}</td>'
                 +'<td>$%{meta}</td>'
                 +'</a></tr>')
@@ -570,7 +573,7 @@ class Cinefiles:
                                 'year':'',
                                 'runtime':'',
                                 'roger':'',
-                                'imdb':'',
+                                'tmdb':'',
                                 'rotten':'',
                                 'meta':''}
             movieattributes.update(f)
@@ -663,7 +666,7 @@ class Cinefiles:
                             'year':'',
                             'runtime':'',
                             'roger':'',
-                            'imdb':'',
+                            'tmdb':'',
                             'rotten':'',
                             'meta':''}
                             
