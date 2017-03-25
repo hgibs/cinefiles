@@ -124,8 +124,6 @@ class Title:
             +'# components have been downloaded. If you delete this \n'
             +'# file, then Cinefiles().run() will re-download and \n'
             +'# index this folder.\n')
-            
-        self.searchfunction=self.duckduckgo
         
         
     def prephtml(self):

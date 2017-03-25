@@ -1,24 +1,28 @@
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 import json
+import logging
+
+# Here's my free API, please don't steal it. You're only stealing the
+# free API key anyway. Which is, you know, free to make yourself.
+GOOGLE_FREE_API_KEY = 'AIzaSyBLkr83ZK5OoGAUx0O4sizJc9UuKHRmTeA'
+ROGEREBERT_SEARCH_ENGINE_ID = '011435517851099762049:tg32kab0kxe'
 
 class GoogleSearch:
-    # Here's my free API, please don't steal it. You're only stealing the
-    # free API key anyway. Which is, you know, free to make yourself.
-    GOOGLE_FREE_API_KEY = 'AIzaSyBLkr83ZK5OoGAUx0O4sizJc9UuKHRmTeA'
-    ROGEREBERT_SEARCH_ENGINE_ID = '011435517851099762049:tg32kab0kxe'
     
-
     def __init__(self):
+        logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
         # The build function creates a service object. It takes an API name and API
         # version as arguments.
         #note: this can take a few seconds to build
+        
         service = build('customsearch', 'v1', developerKey=GOOGLE_FREE_API_KEY)
+        
 
         # A collection is a set of resources. We know this one is called "cse"
         # because the CustomSearch API page tells us cse "Returns the cse Resource".
         self.collection = service.cse()
-        self.get_link = get_link_API
+        self.get_link = self.get_link_API
         self.cxselect = ROGEREBERT_SEARCH_ENGINE_ID
         
 
@@ -42,7 +46,7 @@ class GoogleSearch:
         numresults = int(response['searchInformation']['totalResults'])
         firstresult = response['items'][0]
         link = firstresult['link']
-        if(link.find('/reviews/'<0)
+        if(link.find('/reviews/'<0)):
             #best match wasn't a review
             link = ''
         return link

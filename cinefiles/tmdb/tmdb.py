@@ -38,7 +38,7 @@ class TMDb:
         query = parse.urlencode({'api_key':self.api_key})
         baseurl = 'https://api.themoviedb.org/3/configuration?'
         fullurl = baseurl+query
-        req = safeapi(fullurl)
+        req = self.safeapi(fullurl)
         data = json.loads(req.text)
         
         self.imgbase = data['images']['secure_base_url']
@@ -51,12 +51,12 @@ class TMDb:
                                     'query':title,})
         baseurl = 'https://api.themoviedb.org/3/search/movie?'
         fullurl = baseurl+query
-        req = safeapi(fullurl)
+        req = self.safeapi(fullurl)
         data = json.loads(req.text)
-        
         for res in data['results']:
-            newmovie = Movie(res,self)
-            results.append(newmovie)
+            
+            newmovie = movie.Movie(res,self)
+            self.results.append(newmovie)
             
         return self.results
         
@@ -68,7 +68,7 @@ class TMDb:
             logging.info("TMDb API is reaching rate limit - please notify the API owner!")
             sleep(sleepdelta)
         thisrequest = requests.get(url)
-        self.safetime = checktime(thisrequest)
+        self.safetime = self.checktime(thisrequest)
         
         return thisrequest
             
@@ -76,15 +76,15 @@ class TMDb:
         #returns the time the next request should wait to before starting
         #make sure we aren't exceeding our rate limit of 40 requests / 10 seconds
         now = floor(time())
-        resettime = float(req5.headers['X-RateLimit-Reset'])
-        secondsrem = resettime-now)
+        resettime = float(request.headers['X-RateLimit-Reset'])
+        secondsrem = (resettime-now)
         #average 4/second
-        reqsrem = float(req5.headers['X-RateLimit-Remaining'])
+        reqsrem = float(request.headers['X-RateLimit-Remaining'])
         if(secondsrem > 0):
             reqratio = reqsrem/secondsrem
             if(reqsrem <= 1):
                 #be safe and wait it out
-                return float(req5.headers['X-RateLimit-Reset'])
+                return float(request.headers['X-RateLimit-Reset'])
             if(reqratio < 4.0):
                 #wait until average is back up to 4.0/sec
                 sleepdelta = secondsrem-(reqsrem-1)/reqratio

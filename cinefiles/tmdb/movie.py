@@ -32,8 +32,8 @@ class Movie:
             self.ftitle = self.title
             self.year = 0
             
-        self.attributes.update({'videos':{'results',['']},})
-        self.attributes.update({'images':{'results',['']},})
+        self.attributes.update({'videos':{'results':['']}})
+        self.attributes.update({'images':{'results':['']}})
         
     def fetchinfo(self):
         langkey = self.tmdb.lang

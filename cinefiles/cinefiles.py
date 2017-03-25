@@ -21,14 +21,17 @@ from platform import system
 ### aren't instantiating it for every movie poster
 
 
-from . import title, templatex, tmdb, googlesearch
+from . import title, templatex, googlesearch
+
+from .tmdb import TMDb
+
+TMDB_API_KEY = 'beb6b398540ccc4245a5b4739186a0bb'
     
 class Cinefiles:
-    
-    TMDB_API_KEY = 'beb6b398540ccc4245a5b4739186a0bb'
-    
 
     def __init__(self, *args, **kwargs):
+    
+        logging.getLogger('requests').setLevel(logging.ERROR)
         
         self.configdict = { 'guess':True, 
                             'skip':False, 
@@ -102,7 +105,7 @@ class Cinefiles:
         
         self.tmdb = TMDb(TMDB_API_KEY,self.configdict['def_lang'])
         
-        self.rogersearchengine = GoogleSearch()
+        self.rogersearchengine = googlesearch.GoogleSearch()
 
     #####################
     # The init and prep #
@@ -387,9 +390,8 @@ class Cinefiles:
         print('"'+title+'" ', end='', flush=True)
         if(len(searchresults)==0):
             #couldn't find a match :(
-#               self.nomatch(en)
             if(newname!=''):
-                logging.info('Extended searching on '+file.name+'found'+
+                logging.info('Extended searching on '+title+'found'+
                              ' no matches!!')
                 return False
             self.nomatch(en)
@@ -646,12 +648,13 @@ class Cinefiles:
     def cleararchive(self, archivepath):
         with open(archivepath,'r') as arch:
             for line in arch:
-                file = self.getarchfile(line)
-                if(os.path.isfile(file)):
-                    print("Removing "+file)
-                    os.remove(file)
-                else:
-                    print(file+" already gone!")
+                if(not line.startswith('#')):
+                    file = self.getarchfile(line)
+                    if(os.path.isfile(file)):
+                        print("Removing "+file)
+                        os.remove(file)
+                    else:
+                        print(file+" already gone!")
         
         print("Removing "+archivepath)
         os.remove(archivepath)

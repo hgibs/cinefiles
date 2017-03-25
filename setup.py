@@ -83,11 +83,9 @@ setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[  'requests<3,>=2.4.3',
-                        'imdbparser<2,>=1.0.3',
                         'youtube_dl>=2017.2.17',
                         'guessit<3,>=2.1.1',
                         'langdetect<2,>=1.0.7',
-                        'selenium<4,>=3.0.2',
                         'pycountry<18,>=17.0.0',
                         'google-api-python-client',
     ],
