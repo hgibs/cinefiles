@@ -1,5 +1,6 @@
 import json
 from urllib import parse
+import requests
 
 # import .
 # from . import tmdb
