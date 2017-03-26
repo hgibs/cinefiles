@@ -35,7 +35,10 @@ class Movie:
         self.attributes.update({'videos':{'results':['']}})
         self.attributes.update({'images':{'results':['']}})
         
+        self.fetched = False
+        
     def fetchinfo(self):
+        
         langkey = self.tmdb.lang
         if(self.region is not None):
             langkey+=self.region
@@ -49,6 +52,7 @@ class Movie:
         req = requests.get(fullurl)
         data = json.loads(req.text)
         self.processjson(data)
+        self.fetched = True
         
     def img_base_path(self):
         return self.tmdb.imgbase+self.tmdb.imgsize
@@ -116,8 +120,13 @@ class Movie:
     def youtubepath(self, key):
         return "https://www.youtube.com/watch?v="+key
         
-    def imgpath(self, file_path, size='original'):
-        return self.tmdb.imgbase+size
-            
+    def firsttrailer(self):
+        if(self.fetched):
+            for v in self.trailers:
+                if(v['name'].find('trailer')>=0):
+                    return self.youtubepath(v['key'])
+            raise Exception("No suitable trailer found in trailer list")
+        else:
+            raise Exception("Movie has not been fetched yet!")
         
   

@@ -18,7 +18,7 @@ if(sys.version_info[0]<=2):
   
 __all__ = ["cinefiles","cinefolders","title"]
 
-__version__ = '0.1.dev'
+__version__ = '0.1.4'
 
 __url__ = 'https://github.com/hgibs/cinefiles'
 

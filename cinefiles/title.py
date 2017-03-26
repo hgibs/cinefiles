@@ -3,17 +3,13 @@ from __future__ import unicode_literals
 import youtube_dl
 from urllib import parse
 import requests
-#from bs4 import beautifulsoup #beautifulsoup4
-from selenium import webdriver
-# from selenium.webdriver.phantomjs.phantomjs_binary import PhantomJSBinary
-# from ghost import Ghost
-# import cinefiles 
+
 
 import logging
 #from imdbparser import imdbparser.movie
 from io import open as iopen
 # from urllib.parse import urlsplit
-from lxml import html ##, etree
+# from lxml import html ##, etree
 import os, shutil
 from string import Template
 import json
@@ -23,10 +19,8 @@ from langdetect import detect as detect_language
 
 
 # from . import ydlhandlers as ydlhs
-from . import templatex, cinefiles, search
-
-from . import tmdb
-
+from . import templatex, cinefiles
+from . import __init__
 # print(dir(Cinefiles))
 
 
@@ -131,7 +125,7 @@ class Title:
         self.rogerratingscale = '4'
         self.rogerratingauthor = "[No review found]"
 
-        self.div = ''
+#         self.div = ''
         self.writernum = 0 ###TODO: init all html variables to be safe
         ##need to support windows style:
         #     self.rel_path = self.folderpath+'/../resources/'
@@ -145,16 +139,16 @@ class Title:
 
 #         self.ghostdriver = ghost()
 #             service_args=["--webdriver-loglevel=SEVERE"])
-        self.driver = webdriver.PhantomJS(
-                port=0, 
-                desired_capabilities={
-                    'user-agent':'Mozilla/5.0 PhantomJS cinefiles',
-                    'javascriptEnabled': True, 
-                    'platform': 'ANY', 
-                    'browserName': 'phantomjs', 
-                    'version': ''}, 
-                service_args=None, 
-                service_log_path=None) 
+#         self.driver = webdriver.PhantomJS(
+#                 port=0, 
+#                 desired_capabilities={
+#                     'user-agent':'Mozilla/5.0 PhantomJS cinefiles',
+#                     'javascriptEnabled': True, 
+#                     'platform': 'ANY', 
+#                     'browserName': 'phantomjs', 
+#                     'version': ''}, 
+#                 service_args=None, 
+#                 service_log_path=None) 
 
 
     def checkarchive(self):
@@ -400,6 +394,7 @@ class Title:
                 self.review_rest = ''
         else:
             ##either didn't find it or returned non-review link
+            logging.info("No roger ebert review found")
             self.rogereberthref = ''
             self.review_first = ''
             self.review_rest = ''
@@ -451,46 +446,17 @@ class Title:
     def getposter(self, url):
         # booleq = (self.archivetypes['poster'] in self.archivelist) or (self.configdict['force'])
         #     logging.debug('poster in dict>'+str(booleq))
-        if (not self.archivetypes['poster'] in self.archivelist) and (not self.configs['force']):
-          #This is a javascript loaded page...
-          #preq = requests.get(url)
-            try:
-#                 content
-                self.driver.set_window_size(1024, 768) #optional
-                self.driver.get(url)
-                
-            
-                print(".", end='', flush=True)
-                logging.debug('Fetched with driver '+url)
-
-                postertree = html.fromstring(self.driver.page_source) 
-                imglist = postertree.xpath('//img[@class="pswp__img"]')
-                for i in imglist:
-                  if(i.attrib['style'].find('display') >= 0): #this is the displayed image
-                    self.image_url = i.attrib['src']
-                    break
-                #self.image_url = postertree.xpath('//img[@class="pswp__img"]')[0].attrib['src']
-                self.saveimage()
-            except KeyboardInterrupt:
-                logging.warn('Received KeyboardInterrupt')
-                self.logfiles()
-                exit()
-            except Exception as e:
-                logging.critical(str(e))
-                self.logfiles()
-                exit()
-  
+        if (not self.archivetypes['poster'] in self.archivelist) and (not self.configs['force']):  
+            self.saveimage(url)
         else:
-          logging.info('Skipping poster download')
-          
-          tempstr = self.archivelist[self.archivetypes['poster']]
-#           toplevel = self.higher.configdict['searchfolder']
-          relative_poster = tempstr.split(self.folderpath)[-1]
-          self.postersrc = relative_poster[1:]
+            logging.info('Skipping poster download')
+            tempstr = self.archivelist[self.archivetypes['poster']]
+            relative_poster = tempstr.split(self.folderpath)[-1]
+            self.postersrc = relative_poster[1:]
 
 
-    def saveimage(self):
-        imgreq = requests.get(self.image_url, stream=True)
+    def saveimage(self, url):
+        imgreq = requests.get(url, stream=True)
         imgreq.raw.decode_content = True # handle spurious Content-Encoding
         print(".", end='', flush=True)
         logging.debug('Fetched '+imgreq.url)
@@ -779,13 +745,12 @@ class Title:
 
     def process_movie(self):
         print("\tdownloading", end='', flush=True)
-        base_url = self.movie._get_url()
+#         base_url = self.movie._get_url()
         #     logging.debug(base_url)
 
-        self.movie.fetch()
-        
+        self.movie.fetchinfo()
         print(".", end='', flush=True)
-        logging.debug('Fetched '+base_url)
+        logging.debug('Fetched info on '+self.movie.title)
         #movie.fetch()
         #movie.tree
         #htmlparser = IMDBPageParser()
@@ -793,29 +758,16 @@ class Title:
         #     if(r.status_code == requests.codes.ok):
         self.getrealtitle()
 
-        tree = self.movie.tree 
-        if(len(tree)>0): ##this is the wrong way to do this
-  
-            imgpage = "http://akas.imdb.com"
-            imgpage += tree.xpath('//a[@name="poster"]')[0].attrib['href']
+        self.getposter(self.movie.poster_path)
+        self.findyoutubetrailer()
 
-            self.getposter(imgpage)
-            self.findyoutubetrailer()
-
-            self.div+=html.tostring(tree.xpath('//div[@id="tn15main"]')[0]).decode('utf-8')
-
-            if (self.archivetypes['index'] not in self.archivelist
-                    and not self.configs['force']):
-                self.getreviews()
-                self.writeout()
-            else:
-                logging.info("Not writing index.html, already exists")
-                self.indexfile = self.archivelist[self.archivetypes['index']]
-    
+        if (self.archivetypes['index'] not in self.archivelist
+                and not self.configs['force']):
+            self.getreviews()
+            self.writeout()
         else:
-            logging.error("Couldn't get IMDb movie from link")
-        #       loggin.debug("Got code:"r.status_code)
-            print("ERROR!! ", end='', flush=True)
+            logging.info("Not writing index.html, already exists")
+            self.indexfile = self.archivelist[self.archivetypes['index']]
           #log.append(MovieLog(file.name, "IMDb download error -   "+r.status_code))
         print("done")
 #         open(self.folderpath+'/'+self.higher.getstructurenames()['hiddencompletelog'],'a').close()

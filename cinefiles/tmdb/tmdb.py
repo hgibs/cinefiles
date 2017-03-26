@@ -29,10 +29,10 @@ class TMDb:
             if(not checkregion in regions):
                 raise Exception(region+" is not a valid ISO-3166-1 country code")
             self.region = '-'+checkregion
-            
-            self.process_api_configs()
-        
+          
         self.safetime = 0.0
+        self.process_api_configs()
+        
     
     def process_api_configs(self):
         query = parse.urlencode({'api_key':self.api_key})
