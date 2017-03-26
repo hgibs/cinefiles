@@ -8,6 +8,7 @@ recursive-include cinefiles *.css
 recursive-include cinefiles *.html
 recursive-include cinefiles *.js
 recursive-include cinefiles *.png
+recursive-include cinefiles *.svg
 recursive-include examples *.ini
 recursive-include examples *.py
 recursive-include tests *.py
