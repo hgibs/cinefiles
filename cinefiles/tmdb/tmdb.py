@@ -20,6 +20,7 @@ class TMDb:
         if(not self.lang in langs):
             raise Exception(self.lang+" is not a valid ISO-639-1 language code")
             
+        self.region = region
         if(region is not None):
             regions = []
             checkregion = region[0:2].upper()
