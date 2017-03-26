@@ -46,7 +46,7 @@ class Movie:
         baseurl = 'https://api.themoviedb.org/3/movie/'+self.id+'?'
         query = parse.urlencode({   'api_key':self.tmdb.api_key,
                                     'language':langkey,
-                                    'include_image_language':self.lang+',null',
+                                    'include_image_language':self.tmdb.lang+',null',
                                     'append_to_response':'videos,images,credits'})
         fullurl = baseurl+query
         req = requests.get(fullurl)
