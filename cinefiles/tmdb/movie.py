@@ -38,10 +38,9 @@ class Movie:
         self.fetched = False
         
     def fetchinfo(self):
-        
         langkey = self.tmdb.lang
-        if(self.region is not None):
-            langkey+=self.region
+        if(self.tmdb.region is not None):
+            langkey+=self.tmdb.region
     
         baseurl = 'https://api.themoviedb.org/3/movie/'+self.id+'?'
         query = parse.urlencode({   'api_key':self.tmdb.api_key,

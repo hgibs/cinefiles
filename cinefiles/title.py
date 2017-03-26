@@ -25,9 +25,8 @@ from . import __init__
 
 
 class Title:  
-    TMDB_API_KEY = 'beb6b398540ccc4245a5b4739186a0bb'
 
-    def __init__(self, folderstr, moviefile, caller=None, configdict={}):
+    def __init__(self, folderstr, movieobj, caller=None, configdict={}):
         logging.info("Parsing "+folderstr)
         
         self.suffix_match = {'image/jpeg':'jpg','image/png':'png','image/bmp':'bmp',
@@ -40,7 +39,7 @@ class Title:
         else:
             self.higher = caller
         
-        self.moviefile = moviefile
+        self.movie = movieobj
         self.folderpath = folderstr
         self.configs = configdict
         
@@ -118,6 +117,8 @@ class Title:
             +'# components have been downloaded. If you delete this \n'
             +'# file, then Cinefiles().run() will re-download and \n'
             +'# index this folder.\n')
+            
+        self.title = self.movie.title
         
         
     def prephtml(self):
@@ -709,7 +710,7 @@ class Title:
             logging.debug(  "Original title is not in desired language:"
                             +lang_code)
             self.lang_title = ( '<br /><h4 class="inline">'
-                                +self.movie.title+'&nbsp;'
+                                +self.title+'&nbsp;'
                                 +'</h4><h5 class="inline">'
                                 +'(original title)</h5>'    )
                             
@@ -750,7 +751,7 @@ class Title:
 
         self.movie.fetchinfo()
         print(".", end='', flush=True)
-        logging.debug('Fetched info on '+self.movie.title)
+        logging.debug('Fetched info on '+self.title)
         #movie.fetch()
         #movie.tree
         #htmlparser = IMDBPageParser()
