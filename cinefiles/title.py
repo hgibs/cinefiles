@@ -487,9 +487,9 @@ class Title:
             with open(self.res_path+'index.html','r') as templatefile:
                 templatehtml = templatex.TemplateX(templatefile.read().replace('\n', '').replace('\t', ''))
 
-            pkeywords = ""
-            for p in self.movie.plot_keywords:
-                pkeywords+=p+' '
+            pkeywords = ''
+#             for p in self.movie.plot_keywords:
+#                 pkeywords+=p+' '
   
         #     twidth = int(self.metadata['width'])
         #     theight = int(self.metadata['height'])
