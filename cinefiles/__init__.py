@@ -6,9 +6,12 @@
 
 from __future__ import print_function
 
-from .cinefiles import Cinefiles
-from .cinefolders import Cinefolders
-# import cinefiles
+# from .cinefiles import Cinefiles
+# from .cinefolders import Cinefolders
+from . import cinefiles
+
+
+from os import name as osname
 
 import sys
 ##only python3, because I need new OS import
@@ -22,13 +25,20 @@ __version__ = '0.1.4'
 
 __url__ = 'https://github.com/hgibs/cinefiles'
 
-def ImproveMoviesFolderHandler(argv):
-  import logging
-  
-  # defaultFolder = "/Volumes/Holland Gibson Ext HDD/Movies/Movies"
-  defaultFolder = "/Volumes/Holland Gibson Ext HDD/Movies/testbed"
+def running_on_windows():
+    if(osname=='nt'):
+        ctypes.windll.kernel32.SetFileAttributesW.argtypes = (
+                                    ctypes.c_wchar_p, ctypes.c_uint32)
+        return True
+    return False
 
-  help_string = ( "improve_movies_folder.py -f <folder to improve> [options]  \n"
+def ImproveMoviesFolderHandler(argv):
+    import logging
+
+    # defaultFolder = "/Volumes/Holland Gibson Ext HDD/Movies/Movies"
+    defaultFolder = "/Volumes/Holland Gibson Ext HDD/Movies/testbed"
+
+    help_string = ( "improve_movies_folder.py -f <folder to improve> [options]  \n"
                   "-h\t\tPrint this help menu\n-f <folder>\tWhich folder to search\n"
                   "-d\t\tDefault folder: "+defaultFolder+'\n'
                   "-t\t\tTest, don't download or modify anything just search IMDb\n"
@@ -40,82 +50,83 @@ def ImproveMoviesFolderHandler(argv):
                   "\nNote: this only works when movies are in their own folders. "
                   "\nYou can run 'python renameMovieFolders.py' to do that for you.\n" )
 
-  try:
-    opts, args = getopt.getopt(argv,"hdf:tgs",["force", "force-destroy", "debug:"])
-  except getopt.GetoptError:
-    print(help_string)
-    sys.exit(2)
+    try:
+        opts, args = getopt.getopt(argv,"hdf:tgs",["force", "force-destroy", "debug:"])
+    except getopt.GetoptError:
+        print(help_string)
+        sys.exit(2)
   
-  searchfolder = ''
-  imdb 
-  guess_flag=False
-  skip_flag=False
-  test_flag=False
-  force_flag=False
-  destroy_flag=False
-  log=logging.INFO
+    searchfolder = ''
+    imdb 
+    guess_flag=False
+    skip_flag=False
+    test_flag=False
+    force_flag=False
+    destroy_flag=False
+    log=logging.INFO
 
-  flags = ""
+    flags = ""
 
-  for opt, arg in opts:
-    if opt == '-h':
-      print(help_string)
-      sys.exit(2)
-    elif opt == '-f':
-      searchfolder = arg
-      flags += " -f "+arg
-    elif opt == '-t':
-      test_flag = True
-      flags += " -t"
-    elif opt == '-s':
-      skip_flag = True
-      flags += " -s"
-    elif opt == '-g':
-      guess_flag = True
-      flags += " -g"
-    elif opt == '-d':
-      searchfolder = defaultFolder
-      flags += " -f "+defaultFolder
-    elif opt == "force":
-      force_flag = True
-      flags += " --force"
-    elif opt == "force-destroy":
-      force_flag = True
-      destroy_flag = True
-      flags += " --force-destroy"
-    elif opt == "debug":
-      debug_num = int(arg)
-      flags += " --debug "+arg
+    for opt, arg in opts:
+        if opt == '-h':
+            print(help_string)
+            sys.exit(2)
+        elif opt == '-f':
+            searchfolder = arg
+            flags += " -f "+arg
+        elif opt == '-t':
+            test_flag = True
+            flags += " -t"
+        elif opt == '-s':
+            skip_flag = True
+            flags += " -s"
+        elif opt == '-g':
+            guess_flag = True
+            flags += " -g"
+        elif opt == '-d':
+            searchfolder = defaultFolder
+            flags += " -f "+defaultFolder
+        elif opt == "force":
+            force_flag = True
+            flags += " --force"
+        elif opt == "force-destroy":
+            force_flag = True
+            destroy_flag = True
+            flags += " --force-destroy"
+        elif opt == "debug":
+            debug_num = int(arg)
+            flags += " --debug "+arg
     
-  if(searchfolder == ''):
-    print("You must specify a folder! (-f <folder>) or (-d)")
-    sys.exit(2)
+    if(searchfolder == ''):
+        print("You must specify a folder! (-f <folder>) or (-d)")
+        sys.exit(2)
 
-  if(log > 0):
-    print("Running with:" +flags)
+    if(log > 0):
+        print("Running with:" +flags)
 
-  print('Search folder is: '+searchfolder)
-  if(test_flag):
-    print("TEST mode")
-    force_flag = False
-    destroy_flag = False
-  if(skip_flag):
-    print("Skipping questionable movies")
-  if(not skip_flag and not guess_flag):
-    print("DON'T QUESTION MY AUTHORITY!!")
-  if(force_flag and not destroy_flag):
-    print("Let's get new files this time, but I'm attached to the old ones")
-  if(force_flag and destroy_flag):
-    print("DELETE those old files, let's get new ones")
-  
-  print("")
-  
-  search = imf.ImproveMoviesFolder(searchfolder, guess_flag, skip_flag, test_flag, 
+    print('Search folder is: '+searchfolder)
+    if(test_flag):
+        print("TEST mode")
+        force_flag = False
+        destroy_flag = False
+    if(skip_flag):
+        print("Skipping questionable movies")
+    if(not skip_flag and not guess_flag):
+        print("DON'T QUESTION MY AUTHORITY!!")
+    if(force_flag and not destroy_flag):
+        print("Let's get new files this time, but I'm attached to the old ones")
+    if(force_flag and destroy_flag):
+        print("DELETE those old files, let's get new ones")
+
+    print("")
+
+    search = imf.ImproveMoviesFolder(searchfolder, guess_flag, skip_flag, test_flag, 
                   force_flag, destroy_flag, log)
-              
-  search.run()
+      
+    search.run()
 
 if __name__ == "__main__":
   import sys
   #.improve_movies_folder
   cinefiles.Cinefiles(sys.argv)
+  

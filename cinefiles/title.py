@@ -6,21 +6,18 @@ import requests
 
 
 import logging
-#from imdbparser import imdbparser.movie
 from io import open as iopen
 # from urllib.parse import urlsplit
-# from lxml import html ##, etree
-import os, shutil
+from lxml import html ##, etree
+import os, shutil, ctypes
 from string import Template
 import json
 import time
 
-from langdetect import detect as detect_language
-
 
 # from . import ydlhandlers as ydlhs
 from . import templatex, cinefiles
-from . import __init__
+from .__init__ import __version__
 # print(dir(Cinefiles))
 
 
@@ -45,22 +42,14 @@ class Title:
         
         self.initconfigs()
     
-        
-    
-        
-    
         self.checkarchive()
     
         requests_log = logging.getLogger("requests.packages.urllib3")
         requests_log.setLevel(logging.ERROR) #quiet this up a bit
         requests_log.propagate = True
     
-    
         self.prephtml()
-        
-        
-    
-        ##self.movie.fetch() - we use requests right now
+
         try:
             self.process_movie()
             self.savemetadata()
@@ -138,18 +127,6 @@ class Title:
                           +'/')
         #this is the main file we have to be very careful to be backwards compatible with
 
-#         self.ghostdriver = ghost()
-#             service_args=["--webdriver-loglevel=SEVERE"])
-#         self.driver = webdriver.PhantomJS(
-#                 port=0, 
-#                 desired_capabilities={
-#                     'user-agent':'Mozilla/5.0 PhantomJS cinefiles',
-#                     'javascriptEnabled': True, 
-#                     'platform': 'ANY', 
-#                     'browserName': 'phantomjs', 
-#                     'version': ''}, 
-#                 service_args=None, 
-#                 service_log_path=None) 
 
 
     def checkarchive(self):
@@ -172,6 +149,14 @@ class Title:
                                  +self.archiveheader)
     
             logging.debug('Created new '+self.archivefilename)
+#           should we auto-hide the archive? Let's go with no, for now..
+#             if(self.onwindows and self.higher.configdict['win_hide']):
+#                 FILE_ATTRIBUTE_HIDDEN = 0x02
+#                 hide = ctypes.windll.kernel32.SetFileAttributesW(
+#                                                 self.archivefilename,
+#                                                 FILE_ATTRIBUTE_HIDDEN)
+#                 if not hide: # There was an error.
+#                     raise ctypes.WinError()
   
     def logfiles(self):
         with open(self.archivefilename,'a') as archive:
@@ -285,6 +270,13 @@ class Title:
 
         if(not os.path.exists(localres)):
             os.makedirs(localres)
+            if(running_on_windows() and self.higher.configdict['win_hide']):
+                FILE_ATTRIBUTE_HIDDEN = 0x02
+                hide = ctypes.windll.kernel32.SetFileAttributesW(
+                                                localres,
+                                                FILE_ATTRIBUTE_HIDDEN)
+                if not hide: # There was an error.
+                    raise ctypes.WinError()
 
         self.iconnum = 0
 
@@ -471,12 +463,12 @@ class Title:
             os.makedirs(resfolder)
   
           suffix = self.suffix_match[imgreq.headers['content-type']]
-          outname = self.folderpath+'/'+resfolder+'/'+self.movie.imdb_id+' POSTER'+'.'+suffix
+          outname = self.folderpath+'/'+resfolder+'/'+self.movie.id+' POSTER'+'.'+suffix
   
           with iopen(outname, 'wb') as file:
             file.write(imgreq.content)
 
-          self.postersrc = resfolder+'/'+self.movie.imdb_id+' POSTER'+'.'+suffix
+          self.postersrc = resfolder+'/'+self.movie.id+' POSTER'+'.'+suffix
           self.addfiletolog(self.archivetypes['poster'],outname)
         else:
           logging.error("Bad image request for title:"+title)
@@ -534,10 +526,11 @@ class Title:
             writernum = len(self.movie.writers)
             writerhtml = ''
             for wr in range(writernum):
+                writerdict = self.movie.writers[wr]
                 if(wr>0):
                     writerhtml+=', '
-                writerhtml += "<a href='http://www.imdb.com/name/nm"+self.movie.writers[wr].imdb_id+"'>"
-                writerhtml += self.movie.writers[wr].name
+                writerhtml += "<a href='https://www.themoviedb.org/person/"+writerdict['id']+"'>"
+                writerhtml += writerdict['name']
                 writerhtml += "</a>"
     
             if('Tagline:' in extended_movie_info):
@@ -564,10 +557,11 @@ class Title:
         #       logging.debug(str(dir(self.movie)))
         #       logging.debug(self.movie.directors)
             for d in range(len(self.movie.directors)):
+                directordict = self.movie.directors[d]
                 if(d>0):
                     directorhtml+=', '
-                directorhtml += "<a href='http://www.imdb.com/name/nm"+self.movie.directors[d].imdb_id+"'>"
-                directorhtml += self.movie.directors[d].name
+                directorhtml += "<a href='http://www.imdb.com/name/nm"+directordict['id']+"'>"
+                directorhtml += directordict['name']
                 directorhtml += "</a>"
 
             if(len(self.movie.directors)==0):
@@ -582,14 +576,15 @@ class Title:
             else:
                 writernumtxt = 'Writer:'
     
-            actornum = len(self.movie.actors)
+            actornum = len(self.movie.cast)
             actorhtml = ''
   
             for a in range(min(actornum,self.maxactors)):
+                actordict = self.movie.cast[a]
                 if(a>0):
                     actorhtml+=', '
-                actorhtml += "<a href='http://www.imdb.com/name/nm"+self.movie.actors[a].imdb_id+"'>"
-                actorhtml += self.movie.actors[a].name
+                actorhtml += "<a href='https://www.themoviedb.org/person/"+actordict['id']+"'>"
+                actorhtml += actordict['name']
                 actorhtml += "</a>"
     
             if(actornum>1):
@@ -639,10 +634,10 @@ class Title:
                           'rogername':self.rogerratingauthor,
                           'rogertext1':self.review_first,
                           'rogertextx':self.review_rest,
-                          'imdb_userrating':str(self.movie.rating),
+                          'imdb_userrating':self.omdbdata['imdbRating'],
                           'rottenlink':self.rottenhref,
                           'rotten_rating':self.rottenhtml,
-                          'ttnumber':'tt'+self.movie.imdb_id,
+                          'ttnumber':self.movie.imdb_id,
                           'metacritic':self.metacritichtml  }
                   
         #       logging.debug(replacedict)
@@ -684,7 +679,7 @@ class Title:
                       'year':str(self.movie.year),
                       'runtime':str(self.movie.runtime),
                       'roger':self.rogerratingvalue.replace('_','.'),
-                      'imdb':str(self.movie.rating),
+                      'imdb':self.omdbdata['imdbRating'],
                       'rotten':self.rottenrating,
                       'meta':self.metarating}
         return attributes
@@ -704,41 +699,15 @@ class Title:
     def getrealtitle(self):
         self.title = self.movie.title
         self.lang_title = ''
-        detected_lang = detect_language(self.title)
-        lang_code = self.configs['def_lang'].strip()
-        if(detected_lang != lang_code):
-            logging.debug(  "Original title is not in desired language:"
-                            +lang_code)
+        if(self.movie.title!=self.movie.original_title):
+            logging.debug(  "Received title is not original title")
             self.lang_title = ( '<br /><h4 class="inline">'
                                 +self.title+'&nbsp;'
                                 +'</h4><h5 class="inline">'
                                 +'(original title)</h5>'    )
-                            
-#             self.title = '(Desired language title not found)'
-            for altt in self.movie.alternative_titles:
-                check_lang = detect_language(altt)
-                if(check_lang == lang_code):
-                    self.title = altt
-            
-            
-            
-            if(self.title == self.movie.title):
-                self.title = self.movie.title
-                # self.lang_title = ( '<h5>(Desired language ('
-#                                     +self.configs['def_lang']
-#                                     +') title could not be found)</h5>')
-                                
-        if('override-title-list' in self.configs):
-            for spec_title in self.configs['override-title-list']:
-                if(spec_title.lower() == self.movie.title.lower()):
-                    #We are keeping this title regardless
-                    self.title = self.movie.title
-                    self.lang_title = ''
-                    logging.debug('Title change overridden by/to:'+spec_title)
-                elif spec_title in self.movie.alternative_titles:
-                    self.title = spec_title
+            self.title = self.movie.original_title
         
-        self.ftitle = self.movie.title+' ('+str(self.movie.year)+')'
+        self.ftitle = self.title+' ('+str(self.movie.year)+')'
 
     ###############################
     # The main handler/dispatcher #
@@ -752,9 +721,8 @@ class Title:
         self.movie.fetchinfo()
         print(".", end='', flush=True)
         logging.debug('Fetched info on '+self.title)
-        #movie.fetch()
-        #movie.tree
-        #htmlparser = IMDBPageParser()
+        
+        self.omdbsearch()
 
         #     if(r.status_code == requests.codes.ok):
         self.getrealtitle()

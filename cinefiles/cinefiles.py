@@ -6,6 +6,7 @@ import html.parser
 import datetime
 import logging
 import filecmp
+import ctypes
 import configparser
 from time import strftime
 import tkinter as tk #GUI options
@@ -23,6 +24,8 @@ from platform import system
 
 from . import title, templatex, googlesearch
 
+from .__init__ import __version__, running_on_windows
+
 from .tmdb import TMDb
 
 TMDB_API_KEY = 'beb6b398540ccc4245a5b4739186a0bb'
@@ -30,6 +33,15 @@ TMDB_API_KEY = 'beb6b398540ccc4245a5b4739186a0bb'
 class Cinefiles:
 
     def __init__(self, *args, **kwargs):
+    
+        if(running_on_windows() and __init__.__version__[0]!='2'):
+            print(  "I'm sorry, this code does not handle windows "
+                    +"file paths correctly, so it cannot run yet. "
+                    +"I am deeply sorry for this, please wait until "
+                    +"version 2.0 is released. You could help this "
+                    +"version get released faster by contributing to "
+                    +"this project at github.com/hgibs/cinefiles")
+            sys.exit(2)
     
         logging.getLogger('requests').setLevel(logging.ERROR)
         
@@ -41,7 +53,9 @@ class Cinefiles:
                             'debugnum':logging.INFO,
                             'localresources':True,
                             'searchfolder':'',
-                            'def_lang':'en',}
+                            'def_lang':'en',
+                            'def_region':'US',
+                            'win_hide':True,}
                                                 
         self.matches = []
         self.choices = []
@@ -103,7 +117,9 @@ class Cinefiles:
                 
         self.onceprintentry=None
         
-        self.tmdb = TMDb(TMDB_API_KEY,self.configdict['def_lang'])
+        self.tmdb = TMDb(TMDB_API_KEY,
+                        self.configdict['def_lang'],
+                        self.configdict['def_region'])
         
         self.rogersearchengine = googlesearch.GoogleSearch()
 
@@ -145,6 +161,8 @@ class Cinefiles:
         self.configdict.update({'searchfolder':searchfolder})
         langselect = conf.get('default_language','en')
         self.configdict.update({'def_lang':langselect})
+        regselect = conf.get('default_country','US')
+        self.configdict.update({'def_region':regselect})
         
         localres_bool = conf.getboolean('localresources',fallback=True)
         self.configdict.update({'localresources':localres_bool})
@@ -182,11 +200,14 @@ class Cinefiles:
                             datefmt=self.configdict['logdateformat'],
                             level=self.configdict['debugnum'])
                             
-        overridestr = conf.get('override_title','')
-        overridelist = overridestr.split('+')
-        for title in overridelist:
-            title = title.strip()
-        self.configdict.update({'override-title-list':overridelist})
+#         overridestr = conf.get('override_title','')
+#         overridelist = overridestr.split('+')
+#         for title in overridelist:
+#             title = title.strip()
+#         self.configdict.update({'override-title-list':overridelist})
+        
+        win_hide_bool = conf.getboolean('windows_hide_structure',fallback=True)
+        self.configdict.update({'win_hide':win_hide_bool})
 
     def fixlogdateformat(self, format):
         format = format.replace('{a}','%a')
@@ -224,6 +245,13 @@ class Cinefiles:
         self.installresources = getmoduleresources()
         self.addedres = False
         self.recursiveupdate(self.installresources, newresources)
+        
+        if(running_on_windows() and self.configdict['win_hide']):
+            FILE_ATTRIBUTE_HIDDEN = 0x02
+            hide = ctypes.windll.kernel32.SetFileAttributesW(newresources,
+                                                    FILE_ATTRIBUTE_HIDDEN)
+            if not hide: # There was an error.
+                raise ctypes.WinError()
 
         # if(self.addedres):
 #               logging.info("Added resources to "+resfolder)
@@ -382,13 +410,17 @@ class Cinefiles:
     def process_movie(self,en,newname=''):
 #         self.runtotal+=1
         title = ''
+        year = None
         if(newname != ''):
             print("> ",end='',flush=True)
-            title = guessit(en.name)['title']
+            guessattr = guessit(en.name)
+            title = guessattr['title']
+            if('year' in guessattr):
+                year = title = guessattr['year']
         else:
             title = en.name
         
-        searchresults = self.tmdb.search(title)
+        searchresults = self.tmdb.search(title,year)
         
         print('"'+title+'" ', end='', flush=True)
         if(len(searchresults)==0):
@@ -704,15 +736,4 @@ def getmoduleresources():
     res = resfull.split('/__init__.py')[0]
     res += '/resources'
     return res
-    
-def getphantomjs():
-    #TODO: check what OS we're on and use the correct phantomjs
-    resfull = os.path.abspath(sys.modules['cinefiles'].__file__)
-    res = resfull.split('/__init__.py')[0]
-    phantom = ''
-    if(system()=='Darwin'):
-        phantom = '/phantomjs-2.1.1-macosx/bin/phantomjs'
-    else:
-        raise Exception("I'm sorry, this OS is not supported by PhantomJS")
-    return res+phantom
     

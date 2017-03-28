@@ -8,7 +8,7 @@ from time import sleep, time
 from . import movie
 
 class TMDb:
-    def __init__(self, api_key, language='en', region=None):
+    def __init__(self, api_key, language='en', region='US'):
         self.api_key = api_key
         self.results = []
         langs = []
@@ -29,7 +29,7 @@ class TMDb:
                     regions.append(country.alpha_2)
             if(not checkregion in regions):
                 raise Exception(region+" is not a valid ISO-3166-1 country code")
-            self.region = '-'+checkregion
+            self.region = checkregion
           
         self.safetime = 0.0
         self.process_api_configs()
@@ -47,9 +47,14 @@ class TMDb:
         self.available_poster_sizes = data['images']['poster_sizes']
         self.available_backdrop_sizes = data['images']['backdrop_sizes']
     
-    def search(self, title):
-        query = parse.urlencode({   'api_key':self.api_key,
-                                    'query':title,})
+    def search(self, title, year=None):
+        #not searching by region, to get maximum results
+        api_dict = {'api_key':self.api_key,
+                    'query':title}
+                    
+        if(year is not None):
+            api_dict.update({'year':str(year)})
+        query = parse.urlencode(api_dict)
         baseurl = 'https://api.themoviedb.org/3/search/movie?'
         fullurl = baseurl+query
         req = self.safeapi(fullurl)

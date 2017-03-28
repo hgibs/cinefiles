@@ -17,7 +17,7 @@ class Movie:
                 'production_countries', 'spoken_languages', 'imdb_id', 
                 'images', 'revenue', 'vote_average', 'overview', 
                 'vote_count', 'status', 'belongs_to_collection',
-                'original_language']
+                'original_language','original_title']
                 
         for k in keys:
             self.attributes.update({k:''})
@@ -40,20 +40,22 @@ class Movie:
         self.fetched = False
         
     def fetchinfo(self):
-        langkey = self.tmdb.lang
-        if(self.tmdb.region is not None):
-            langkey+=self.tmdb.region
+        if(not self.fetched):
+            langkey = self.tmdb.lang
+            if(self.tmdb.region is not None):
+                langkey+='-'+self.tmdb.region
     
-        baseurl = 'https://api.themoviedb.org/3/movie/'+self.id+'?'
-        query = parse.urlencode({   'api_key':self.tmdb.api_key,
-                                    'language':langkey,
-                                    'include_image_language':self.tmdb.lang+',null',
-                                    'append_to_response':'videos,images,credits'})
-        fullurl = baseurl+query
-        req = requests.get(fullurl)
-        data = json.loads(req.text)
-        self.processjson(data)
-        self.fetched = True
+            baseurl = 'https://api.themoviedb.org/3/movie/'+self.id+'?'
+            query = parse.urlencode({   'api_key':self.tmdb.api_key,
+                                        'language':langkey,
+                                        'include_image_language':self.tmdb.lang+',null',
+                                        'append_to_response':'videos,images,credits,alternative_titles',})
+            fullurl = baseurl+query
+            self.debugquery=fullurl
+            req = requests.get(fullurl)
+            data = json.loads(req.text)
+            self.processjson(data)
+            self.fetched = True
         
     def img_base_path(self):
         return self.tmdb.imgbase+self.tmdb.imgsize
@@ -87,6 +89,9 @@ class Movie:
         self.adult = self.attributes['adult']
         self.spoken_languages = self.attributes['spoken_languages']
         self.vote_average = self.attributes['vote_average']
+        self.id = str(self.attributes['id'])
+        
+        self.alternative_titles = self.attributes['alternative_titles']['titles']
         
         self.trailers = []
         self.clips = []

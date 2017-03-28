@@ -85,9 +85,9 @@ setup(
     install_requires=[  'requests<3,>=2.4.3',
                         'youtube_dl>=2017.2.17',
                         'guessit<3,>=2.1.1',
-                        'langdetect<2,>=1.0.7',
                         'pycountry<18,>=17.0.0',
-                        'google-api-python-client',
+                        'google-api-python-client<2,>=1.6.2',
+                        'lxml<4,>=3.7.3',
     ],
 
     # List additional groups of dependencies here (e.g. development
