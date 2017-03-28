@@ -494,19 +494,19 @@ class Title:
         #     twidth = int(self.metadata['width'])
         #     theight = int(self.metadata['height'])
 
-            h5entries = self.movie.tree.xpath('//div[@class="info"]/h5')
-            extended_movie_info = {}
-            for e in h5entries:
-                if(e.text is not None):
-                    thiskey = e.text.strip()
-
-                    next = e.getnext()
-                    if(next is None or next.text is None):
-                        thisvalue = ''
-                    else:
-                        thisvalue = next.text.replace('\n','').strip()
-
-                    extended_movie_info.update({thiskey:thisvalue})
+#             h5entries = self.movie.tree.xpath('//div[@class="info"]/h5')
+#             extended_movie_info = {}
+#             for e in h5entries:
+#                 if(e.text is not None):
+#                     thiskey = e.text.strip()
+# 
+#                     next = e.getnext()
+#                     if(next is None or next.text is None):
+#                         thisvalue = ''
+#                     else:
+#                         thisvalue = next.text.replace('\n','').strip()
+# 
+#                     extended_movie_info.update({thiskey:thisvalue})
               ##not really that great, misses all linked text
     
         #         if(thiskey=='Writers:' or thiskey=='Writer:'):
@@ -533,14 +533,12 @@ class Title:
                 writerhtml += writerdict['name']
                 writerhtml += "</a>"
     
-            if('Tagline:' in extended_movie_info):
-                taglinetext = extended_movie_info['Tagline:']
-            else:
+            taglinetext = self.movie.tagline
+            if(taglinetext==''):
                 taglinetext = '[No tagline text found]'
   
-            if('Plot:' in extended_movie_info):
-                plottext = extended_movie_info['Plot:']
-            else:
+            plottext = self.movie.overview
+            if(plottext==''):
                 plottext = '[No plot text found]'
 
         #     directors = self.movie.tree.xpath('//div[@id="director-info"]/div[@class="info-content"]/a')
