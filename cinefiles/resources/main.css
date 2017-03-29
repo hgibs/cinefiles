@@ -228,10 +228,13 @@ footer {
 }
 
 .attribution {
-  background-image: url("images/tmdb-attribution-rectangle.png");
 /*   408x161 */
+/* 
+  background-image: url("images/tmdb-attribution-rectangle.png");
   background-repeat: no-repeat;
   background-position: center;
+ */
+  margin-right: 15px;
   height: 54px;
   width: 136px;
   float: right;

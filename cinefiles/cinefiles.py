@@ -15,6 +15,7 @@ import filecmp, mimetypes
 from guessit import guessit
 from io import open as iopen
 from platform import system
+import traceback
 
 ### Could thread this because it is a SO SLOOWWW
 
@@ -63,7 +64,6 @@ class Cinefiles:
         self.indexlist = []
         
         self.structnames = {'hiddenresfolder':'.cinefiles',
-                            'hiddencompletelog':'complete.log',
                             'archive':'.archive.log'}
         
         if len(kwargs) == 0:
@@ -170,10 +170,6 @@ class Cinefiles:
         hiddenresfolder = conf.get('resource_folder_name',
                                     self.structnames['hiddenresfolder'])
         self.structnames.update({'hiddenresfolder':hiddenresfolder})
-        
-#         hiddencompletelog = conf.get('complete_log_filename',
-#                                      self.structnames['hiddencompletelog'])
-#         self.structnames.update({'hiddencompletelog':hiddencompletelog})
         
         archive = conf.get('file_archive_filename',
                            self.structnames['archive'])
@@ -292,7 +288,7 @@ class Cinefiles:
 #                       except FileNotFoundError as e:
 #                           logging.critical('Resource '+entry.path+' not found (')
         except Exception as e:
-            logging.critical(str(e))
+            self.critical(e)
 
 
     #################################
@@ -365,8 +361,6 @@ class Cinefiles:
             for subentry in subit:
                 if(subentry.name == self.structnames['archive']):
                     alreadyparsed = self.checkarchive(subentry)
-#                 if(subentry.name == self.structnames['hiddencompletelog']):
-#                     alreadyparsed = True
                 elif('.'+subentry.name.split('.')[-1] in self.allowedvideoextensions):
                     foundvideo = True
                 elif(subentry.name not in self.structnames.values()):
@@ -416,7 +410,7 @@ class Cinefiles:
             guessattr = guessit(en.name)
             title = guessattr['title']
             if('year' in guessattr):
-                year = title = guessattr['year']
+                year = guessattr['year']
         else:
             title = en.name
         
@@ -578,7 +572,14 @@ class Cinefiles:
             self.popup.mainloop()
         
             #choosing/skipping is done by button call
+   
+   
+    ##################
+    # error handling #
+    ##################
         
+    def critical(self, err):
+        logging.critical(str(err)+'\n'+traceback.format_exc())
         
         
     #######################
@@ -624,7 +625,8 @@ class Cinefiles:
         
         replacedict = { 'headertitle':self.configdict['searchfolder'].split('/')[-1],
                         'cf_res':self.structnames['hiddenresfolder'],
-                        'table_rows':tablerows}
+                        'table_rows':tablerows,
+                        'tmdb_logo':'/images/tmdb-attribution-rectangle.png',}
         
         writeouthtml = html.substitute(replacedict)
         
@@ -662,7 +664,6 @@ class Cinefiles:
                             
     def purgerecursevily(self,entry):
         hiddenres = self.structnames['hiddenresfolder']
-        hiddencomplete = self.structnames['hiddencompletelog']
         archivename = self.structnames['archive']
         subit = os.scandir(entry.path)
         for subentry in subit:
@@ -671,12 +672,6 @@ class Cinefiles:
                 rmtree(subentry.path)
             elif(subentry.is_dir()):
                 self.purgerecursevily(subentry)
-            elif(subentry.name == hiddencomplete):
-                if(os.path.isfile(subentry.path)):
-                    print("Removing "+subentry.path)
-                    os.remove(subentry.path)
-                else:
-                    print(subentry.path+" already gone!")
             elif(subentry.name == archivename):
                 self.cleararchive(subentry.path)
     
@@ -698,17 +693,17 @@ class Cinefiles:
         return line[13:-1]
         
     def getattrfrommetadata(self, path):
+        resname = self.structnames['hiddenresfolder']
         movieattributes = { 'indexfile':'',
                             'postersrc':'',
                             'title':'',
                             'year':'',
                             'runtime':'',
                             'roger':'',
-                            'tmdb':'',
+                            'imdb':'',
                             'rotten':'',
-                            'meta':''}
+                            'meta':'',}
                             
-        resname = self.structnames['hiddenresfolder']
         metadatapath = path+'/'+resname+'/metadata.txt'
         
         with open(metadatapath,'r') as mdata:

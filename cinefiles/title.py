@@ -54,7 +54,7 @@ class Title:
             self.process_movie()
             self.savemetadata()
         except Exception as e:
-            logging.critical(str(e))
+            self.higher.critical(e)
             print('ERROR!')
         finally:
     #       logging.debug('Finally writing archive:'+str(self.filearchive))
@@ -159,7 +159,7 @@ class Title:
 #                     raise ctypes.WinError()
   
     def logfiles(self):
-        with open(self.archivefilename,'a') as archive:
+        with open(self.archivefilename,'w') as archive:
             for f in self.filearchive:
                 archive.write(f[0]+':'+f[1]+':'+f[2]+'\n')
 
@@ -264,8 +264,12 @@ class Title:
         elif(d['status'] == 'finished'):
             print("\b.", end='', flush=True)
             self.trailerfile = d['filename'].split('/')[-1]
+        elif(d['status'] == 'error'):
+            logging.warn('Failed to download youtube trailer')
+            self.trailersuccess = False
 
     def savetrailer(self, code):
+        self.trailersuccess = True
         localres = self.higher.getstructurenames()['hiddenresfolder']
 
         if(not os.path.exists(localres)):
@@ -304,23 +308,28 @@ class Title:
         logging.debug('Trailer at '+fixedcode)
 
         try:
-          print('X',end='',flush=True)
-  
-          with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([fixedcode])
+            print('X',end='',flush=True)
 
-          self.trailerthumb = self.trailerfile[:-4]+'.jpg'
-  
-          self.trailerfile = localres+'/'+self.trailerfile
-          self.trailerthumb = localres+'/'+self.trailerthumb
-  
-          prefix = self.folderpath+'/'
-          self.addfiletolog(self.archivetypes['trailer-thumbnail'],prefix+self.trailerthumb)
-          self.addfiletolog(self.archivetypes['trailer'],prefix+self.trailerfile)
-          self.addfiletolog(self.archivetypes['ydlarch'],ydlarchive)
+            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([fixedcode])
+    
+            if(self.trailerfile == ''):
+                logging.warn('Failed to download youtube trailer')
+                self.trailersuccess = False
+
+            if(self.trailersuccess):
+                self.trailerthumb = self.trailerfile[:-4]+'.jpg'
+
+                self.trailerfile = localres+'/'+self.trailerfile
+                self.trailerthumb = localres+'/'+self.trailerthumb
+
+                prefix = self.folderpath+'/'
+                self.addfiletolog(self.archivetypes['trailer-thumbnail'],prefix+self.trailerthumb)
+                self.addfiletolog(self.archivetypes['trailer'],prefix+self.trailerfile)
+                self.addfiletolog(self.archivetypes['ydlarch'],ydlarchive)
         except Exception as e:
-          logging.critical(str(e))
-          self.trailerfile=''
+            logging.warn(str(e))
+            self.trailerfile=''
 
 
 
@@ -426,6 +435,7 @@ class Title:
         self.metacritichtml = ''
         if('Metascore' in self.omdbdata.keys()):
             self.metacritichtml = self.omdbdata['Metascore']
+            self.metarating = self.omdbdata['Metascore']
         else:
             logging.debug("No metacritic key from OMDb")
             
@@ -529,7 +539,7 @@ class Title:
                 writerdict = self.movie.writers[wr]
                 if(wr>0):
                     writerhtml+=', '
-                writerhtml += "<a href='https://www.themoviedb.org/person/"+writerdict['id']+"'>"
+                writerhtml += "<a href='https://www.themoviedb.org/person/"+str(writerdict['id'])+"'>"
                 writerhtml += writerdict['name']
                 writerhtml += "</a>"
     
@@ -558,7 +568,7 @@ class Title:
                 directordict = self.movie.directors[d]
                 if(d>0):
                     directorhtml+=', '
-                directorhtml += "<a href='http://www.imdb.com/name/nm"+directordict['id']+"'>"
+                directorhtml += "<a href='http://www.imdb.com/name/nm"+str(directordict['id'])+"'>"
                 directorhtml += directordict['name']
                 directorhtml += "</a>"
 
@@ -581,7 +591,7 @@ class Title:
                 actordict = self.movie.cast[a]
                 if(a>0):
                     actorhtml+=', '
-                actorhtml += "<a href='https://www.themoviedb.org/person/"+actordict['id']+"'>"
+                actorhtml += "<a href='https://www.themoviedb.org/person/"+str(actordict['id'])+"'>"
                 actorhtml += actordict['name']
                 actorhtml += "</a>"
     
@@ -636,7 +646,8 @@ class Title:
                           'rottenlink':self.rottenhref,
                           'rotten_rating':self.rottenhtml,
                           'ttnumber':self.movie.imdb_id,
-                          'metacritic':self.metacritichtml  }
+                          'metacritic':self.metacritichtml,
+                          'tmdb_logo':res_folder+'/images/tmdb-attribution-rectangle.png'}
                   
         #       logging.debug(replacedict)
                 

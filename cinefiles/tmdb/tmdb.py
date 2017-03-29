@@ -10,7 +10,6 @@ from . import movie
 class TMDb:
     def __init__(self, api_key, language='en', region='US'):
         self.api_key = api_key
-        self.results = []
         langs = []
         for lang in pycountry.languages:
             if hasattr(lang, 'alpha_2'):
@@ -48,6 +47,7 @@ class TMDb:
         self.available_backdrop_sizes = data['images']['backdrop_sizes']
     
     def search(self, title, year=None):
+        results = []
         #not searching by region, to get maximum results
         api_dict = {'api_key':self.api_key,
                     'query':title}
@@ -62,9 +62,9 @@ class TMDb:
         for res in data['results']:
             
             newmovie = movie.Movie(res,self)
-            self.results.append(newmovie)
+            results.append(newmovie)
             
-        return self.results
+        return results
         
     def safeapi(self, url):
 #         now = floor(time())

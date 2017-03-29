@@ -1,8 +1,10 @@
 from apiclient.discovery import build
 from apiclient.errors import HttpError
+from urllib import parse
 import json
 import logging
 import requests
+from lxml import html
 
 # Here's my free API, please don't steal it. Or do, I don't really care.
 # You're only stealing the free API key anyway. Which is, you know, free
@@ -22,6 +24,7 @@ class GoogleSearch:
         # A collection is a set of resources. We know this one is called "cse"
         # because the CustomSearch API page tells us cse "Returns the cse Resource".
         self.collection = service.cse()
+#         self.linksearch = {'roger':True,'link':True,'scrape':True}
         self.get_link = self.try_ALL_API
         self.cxselect = ROGEREBERT_SEARCH_ENGINE_ID
         
@@ -36,7 +39,9 @@ class GoogleSearch:
         if(link!=''):
             return link
             
+            
         #that didn't work, use mine
+        logging.debug("use_roger_API failed")
         try:
             link = self.get_link_API(query)
         except:
@@ -46,6 +51,7 @@ class GoogleSearch:
             return link
             
         #damn both APIs are down, just scrape google I guess
+        logging.debug("get_link_API failed")
         try:
             link = self.get_link_scrape(query)
         except:
@@ -71,6 +77,7 @@ class GoogleSearch:
         req = requests.get(fullurl)
         print('.',end='',flush=True)
         data = json.loads(req.text)
+        self.debugroger = data
         if('results' in data):
             if(len(data['results']) > 0):
                 firstresult = data['results'][0]
@@ -91,15 +98,14 @@ class GoogleSearch:
             #malformed or (more likely) over the query limit
             logging.error(  "Got code "+err.resp['status']+" for google "
                             +"API access. Please contact the developer of"
-                            +" cinefiles."
-                            )
-            self.get_link = get_link_scrape
-            return self.get_link_scrape(query)
+                            +" cinefiles.")
+            return ''
         
         numresults = int(response['searchInformation']['totalResults'])
         firstresult = response['items'][0]
+        self.debuglink = response
         link = firstresult['link']
-        if(link.find('/reviews/'<0)):
+        if(link.find('/reviews/')<0):
             #best match wasn't a review
             link = ''
         return link
@@ -108,8 +114,8 @@ class GoogleSearch:
     def get_link_scrape(self, query):
         #use google search to find, can result in queries being
         #rejected because we aren't using an API
-        query = parse.urlencode({'q':self.ftitle+" site:www.rogerebert.com"})
-        googlereq = requests.get("https://www.google.com/search?"+query)
+        fquery = parse.urlencode({'q':query+" site:www.rogerebert.com"})
+        googlereq = requests.get("https://www.google.com/search?"+fquery)
         print(".", end='', flush=True)
         logging.debug('Fetched '+googlereq.url)
 
@@ -121,6 +127,7 @@ class GoogleSearch:
             findlink = links[0].attrib['href']
             findlink = findlink.split('?q=')[-1]
             findlink = findlink.split('&')[0]
+            self.debugscrape = links
             return findlink
         else:
             return ''
