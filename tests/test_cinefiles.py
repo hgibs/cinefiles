@@ -48,5 +48,7 @@ def test_examplerunA(directoryA, examples, monkeypatch):
     #check basic structure
     for item in directoryA.listdir():
         if(item.isdir()):
-            truthcheck = truthcheck and item.join('index.htm').exists()
+            if(not item.basename.startswith('cinefiles') or 
+                        not item.basename.startswith('.cinefiles')):
+                truthcheck = truthcheck and item.join('index.htm').exists()
     assert truthcheck
