@@ -29,10 +29,12 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install phantomjs; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install phantomjs; fi
+  
+  - pip install pytest pytest-cov
+  - pip install coveralls
 
 install:  
-  - pip install coveralls
-  - pip install -e .
+  - pip install -e .[test]
 # command to run tests
 script:
 #  coverage run --source=cinefiles setup.py test
