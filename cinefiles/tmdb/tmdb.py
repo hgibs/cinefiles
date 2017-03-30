@@ -123,7 +123,7 @@ class TMDb:
             
     def getresettime(self, request):
         if('X-RateLimit-Reset' in request.headers):
-            return float(request.headers['X-RateLimit-Reset']
+            return float(request.headers['X-RateLimit-Reset'])
         else:
             tdata = json.loads(request.text)
             if('Retry-After' in tdata):
