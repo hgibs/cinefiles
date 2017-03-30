@@ -129,7 +129,7 @@ class Movie:
     def firsttrailer(self):
         if(self.fetched):
             for v in self.trailers:
-                if(v['name'].find('trailer')>=0):
+                if(v['name'].lower().find('trailer')>=0):
                     return self.youtubepath(v['key'])
             raise Exception("No suitable trailer found in trailer list")
         else:
