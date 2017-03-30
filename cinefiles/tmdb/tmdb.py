@@ -71,7 +71,7 @@ class TMDb:
 #     def getbyid(self, id):
         
         
-    def safeapi(self, url):
+    def safeapi(self, url, callnum=0):
 #         now = floor(time())
         sleepdelta = self.safetime-time()
         if(sleepdelta > 0):
@@ -81,6 +81,12 @@ class TMDb:
         thisrequest = requests.get(url)
         if(thisrequest.ok):
             self.safetime = self.checktime(thisrequest)
+            if(self.getremainingreqs(thisrequest) < 3):
+                #with small buffer, set wait-out until rate-limit clears
+                self.safetime = self.getresettime(thisrequest)
+        elif(thisrequest.status_code == 429 and callnum < 3):
+            self.sleepuntil(self.getresettime(thisrequest))
+            return self.safeapi(url,1)
         else:
             tdata = json.loads(thisrequest.text)
             if('status_code' in tdata):
@@ -95,10 +101,10 @@ class TMDb:
         #returns the time the next request should wait to before starting
         #make sure we aren't exceeding our rate limit of 40 requests / 10 seconds
         now = floor(time())
-        resettime = float(request.headers['X-RateLimit-Reset'])
+        resettime = self.getresettime(request)
         secondsrem = (resettime-now)
         #average 4/second
-        reqsrem = float(request.headers['X-RateLimit-Remaining'])
+        reqsrem = self.getremainingreqs(request)
         if(secondsrem > 0):
             reqratio = reqsrem/secondsrem
             if(reqsrem <= 1):
@@ -114,5 +120,16 @@ class TMDb:
         else:
             #0 seconds remaining
             return now
+            
+    def getresettime(self, request):
+        return float(request.headers['X-RateLimit-Reset'])
+        
+    def getremainingreqs(self, request):
+        return float(request.headers['X-RateLimit-Remaining'])
+        
+    def sleepuntil(self, endtime):
+        delta = endtime-time()
+        if(delta > 0):
+            sleep(delta)
         
     

@@ -49,6 +49,4 @@ def test_examplerunA(directoryA, examples, monkeypatch):
     for item in directoryA.listdir():
         if(item.isdir()):
             truthcheck = truthcheck and item.join('index.htm').exists()
-        else:
-            truthcheck = truthcheck and item.basename == 'index.htm'
     assert truthcheck
