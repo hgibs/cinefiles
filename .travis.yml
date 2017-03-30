@@ -38,7 +38,7 @@ install:
 # command to run tests
 script:
 #  coverage run --source=cinefiles setup.py test
-  pytest --cov
+  pytest --cov=cinefiles --cov-report term-missing
   
 after_success:
   coveralls
