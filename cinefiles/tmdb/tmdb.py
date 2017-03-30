@@ -122,10 +122,20 @@ class TMDb:
             return now
             
     def getresettime(self, request):
-        return float(request.headers['X-RateLimit-Reset'])
+        if('X-RateLimit-Reset' in request.headers):
+            return float(request.headers['X-RateLimit-Reset']
+        else:
+            tdata = json.loads(request.text)
+            if('Retry-After' in tdata):
+                return time()+float(tdata['Retry-After'])
+            else:
+                return time()+10.0
         
     def getremainingreqs(self, request):
-        return float(request.headers['X-RateLimit-Remaining'])
+        if('X-RateLimit-Remaining' in request.headers):
+            return float(request.headers['X-RateLimit-Remaining'])
+        else:
+            return 0
         
     def sleepuntil(self, endtime):
         delta = endtime-time()
