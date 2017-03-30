@@ -2,10 +2,11 @@ from urllib import parse
 import requests
 import json
 import pycountry
+import logging
 from math import floor
 from time import sleep, time
 
-from . import movie
+from . import movie, exceptions
 
 class TMDb:
     def __init__(self, api_key, language='en', region='US'):
@@ -32,6 +33,7 @@ class TMDb:
           
         self.safetime = 0.0
         self.process_api_configs()
+            
         
     
     def process_api_configs(self):
@@ -74,7 +76,15 @@ class TMDb:
             logging.info("TMDb API is reaching rate limit - please notify the API owner!")
             sleep(sleepdelta)
         thisrequest = requests.get(url)
-        self.safetime = self.checktime(thisrequest)
+        if(thisrequest.ok):
+            self.safetime = self.checktime(thisrequest)
+        else:
+            tdata = json.loads(thisrequest.text)
+            if('status_code' in tdata):
+                if(tdata['status_code']==7):
+                    raise exceptions.APIKeyException(tdata['status_message'])
+            raise requests.exceptions.ConnectionError('Request got code '+str(thisrequest.status_code))
+            return None
         
         return thisrequest
             
