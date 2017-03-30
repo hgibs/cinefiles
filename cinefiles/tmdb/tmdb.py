@@ -68,6 +68,9 @@ class TMDb:
             
         return results
         
+#     def getbyid(self, id):
+        
+        
     def safeapi(self, url):
 #         now = floor(time())
         sleepdelta = self.safetime-time()

@@ -97,4 +97,4 @@ testsearches = [('Casablanca',      1942,   289),
 @pytest.mark.parametrize("title,year,id",testsearches)
 def test_search(defaultTMDb, title, year, id):
     results = defaultTMDb.search(title,year)
-    assert results[0].id == id
+    assert int(results[0].id) == id
