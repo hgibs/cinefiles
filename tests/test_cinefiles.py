@@ -51,8 +51,8 @@ def test_examplerunA(directoryA, examples, monkeypatch):
     #check basic structure
     for item in directoryA.listdir():
         if(item.isdir()):
-            if(not item.basename.startswith('cinefiles') or 
-                        not item.basename.startswith('.cinefiles')):
+            foldername = str(item).split('/')[-1]
+            if(foldername != 'cinefiles' or foldername != '.cinefiles'):
                 index = item.join('/index.htm')
                 print(str(index))
 #                 truthcheck = truthcheck and index.exists()
