@@ -67,7 +67,10 @@ setup(
     keywords='movies organization folder',
 
     packages=find_packages('src'),
+#     packages = [],
     package_dir={'': 'src'},
+#     package_data={'': ['src/cinefiles/resources']},
+    include_package_data=True,
 #     entry_points = {'console_scripts': ['cinefiles=cinefiles.__main__:main_cfiles',
 #                                         'cinefolders=cinefiles.__main__:main_cfolders'],},
 

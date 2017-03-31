@@ -1,10 +1,5 @@
-include *.rst 
-include *.txt 
-include LICENSE 
-include .travis.yml 
-include *.md
-include *.py
 graft src
-recursive-include examples *.ini
-recursive-include examples *.py
-recursive-include tests *.py
+
+include LICENSE
+
+global-exclude *.py[co] __pycache__
