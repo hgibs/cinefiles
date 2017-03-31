@@ -35,4 +35,4 @@ script:
   pytest --cov=cinefiles --cov-report term-missing
   
 after_success:
-  coveralls
+  codecov
