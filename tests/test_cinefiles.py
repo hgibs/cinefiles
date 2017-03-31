@@ -56,7 +56,7 @@ def test_examplerunA(directoryA, examples, monkeypatch):
                 index = item.join('/index.htm')
                 print(str(index))
 #                 truthcheck = truthcheck and index.exists()
-                assert index.exists()
+                assert os.path.exists(str(index))
                 
 #     recurseprint(directoryA)
     assert truthcheck
