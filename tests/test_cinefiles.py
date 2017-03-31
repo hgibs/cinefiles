@@ -55,6 +55,14 @@ def test_examplerunA(directoryA, examples, monkeypatch):
                         not item.basename.startswith('.cinefiles')):
                 truthcheck = truthcheck and item.join('index.htm').exists()
                 
-    dirlist = glob.glob(str(directoryA)+'/*')
-    pprint(dirlist)
+    recurseprint(directoryA)
     assert truthcheck
+    
+def recurseprint(directoryobj,tabnum=0):
+    for item in directoryobj.listdir():
+        print('\t'*tabnum+item.basename, end='')
+        if(item.isdir()):
+            print('/')
+            recurseprint(item,tabnum+1)
+        else:
+            print('')
