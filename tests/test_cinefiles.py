@@ -2,6 +2,7 @@ import pytest, os, shutil
 
 import glob
 from pprint import pprint
+from lxml import html
 
 import cinefiles.cinefiles as cf
 
@@ -103,6 +104,33 @@ def test_metadata(directoryB):
         print(str(pathobj))
         for key in resultdict:
             assert resultdict[key] != ''
+
+@pytest.mark.skipif(os.environ['LOGNAME'] == 'holland',
+                    reason="Don't run on home computer")            
+def test_masterindex_imdb(directoryB):
+    masterindex = directoryB.join('/index.htm')
+    tree = html.fromstring(masterindex.readlines())
+    results = tree.xpath('//td[@class="rowimdb"]')
+    for r in results:
+        assert r.text_content != ''
+    
+@pytest.mark.skipif(os.environ['LOGNAME'] == 'holland',
+                    reason="Don't run on home computer")            
+def test_masterindex_meta(directoryB):
+    masterindex = directoryB.join('/index.htm')
+    tree = html.fromstring(masterindex.readlines())
+    results = tree.xpath('//td[@class="rowmeta"]')
+    for r in results:
+        assert r.text_content != ''
+    
+@pytest.mark.skipif(os.environ['LOGNAME'] == 'holland',
+                    reason="Don't run on home computer")            
+def test_masterindex_meta(directoryB):
+    masterindex = directoryB.join('/index.htm')
+    tree = html.fromstring(masterindex.readlines())
+    results = tree.xpath('//td[@class="rowroger"]')
+    for r in results:
+        assert r.text_content != ''
     
 @pytest.fixture(scope='function')
 def min_ini(tmpdir_factory):

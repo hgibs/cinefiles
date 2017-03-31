@@ -592,13 +592,13 @@ class Cinefiles:
                 '<tr class="">'
                 +'<td><a class="rowlink" href="$%{foldername}/index.htm">'
                 +'<img class="thumbnail" src="$%{foldername}/$%{postersrc}"></a></td>'
-                +'<td>$%{title}</td>'
-                +'<td>$%{year}</td>'
-                +'<td>$%{runtime}</td>'
-                +'<td>$%{roger}</td>'
-                +'<td>$%{tmdb}</td>'
-                +'<td>$%{rotten}</td>'
-                +'<td>$%{meta}</td>'
+                +'<td class="rowtitle">$%{title}</td>'
+                +'<td class="rowyear">$%{year}</td>'
+                +'<td class="rowruntime">$%{runtime}</td>'
+                +'<td class="rowroger">$%{roger}</td>'
+                +'<td class="rowimdb">$%{imdb}</td>'
+                +'<td class="rowrotten">$%{rotten}</td>'
+                +'<td class="rowmeta">$%{meta}</td>'
                 +'</a></tr>')
         
         tablerows = ''
@@ -611,7 +611,7 @@ class Cinefiles:
                                 'year':'',
                                 'runtime':'',
                                 'roger':'',
-                                'tmdb':'',
+                                'imdb':'',
                                 'rotten':'',
                                 'meta':''}
             movieattributes.update(f)
