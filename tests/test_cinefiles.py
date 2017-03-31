@@ -52,11 +52,12 @@ def test_examplerunA(directoryA, examples, monkeypatch):
     for item in directoryA.listdir():
         if(item.isdir()):
             foldername = str(item).split('/')[-1]
-            if(foldername != 'cinefiles' or foldername != '.cinefiles'):
+            print(foldername)
+            if(foldername != 'cinefiles' and foldername != '.cinefiles'):
                 index = item.join('/index.htm')
-                print(str(index))
 #                 truthcheck = truthcheck and index.exists()
-                assert os.path.exists(str(index))
+#                 assert os.path.exists(foldername+'/index.htm')
+                assert index.exists()
                 
 #     recurseprint(directoryA)
     assert truthcheck

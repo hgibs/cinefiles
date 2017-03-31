@@ -32,7 +32,8 @@ install:
 # command to run tests
 script:
 #  coverage run --source=cinefiles setup.py test
-  pytest --cov=cinefiles --cov-report term-missing
+#  pytest --cov=cinefiles --cov-report term-missing
+  pytest --cov=./
   
 after_success:
   codecov
