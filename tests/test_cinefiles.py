@@ -99,7 +99,7 @@ def test_metadata(directoryB):
     newsearch = cf.Cinefiles(searchfolder=str(directoryB))
     for m in moviesB:
         pathobj = directoryB.join('/'+m)
-        resultdict = newsearch.getattrfrommetadata(str(pathobj)):
+        resultdict = newsearch.getattrfrommetadata(str(pathobj))
         print(str(pathobj))
         for key in resultdict:
             assert resultdict[key] != ''
