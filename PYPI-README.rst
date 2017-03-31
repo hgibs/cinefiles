@@ -3,35 +3,17 @@
 cinefiles
 ============
 
-.. image:: https://travis-ci.org/hgibs/cinefiles.svg?branch=master
+.. image:: https://travis-ci.org/hgibs/cinefiles.svg?branch=master   :target: https://travis-ci.org/hgibs/cinefiles
+
+.. image:: https://img.shields.io/codecov/c/github/hgibs/cinefiles/master.svg   :target: https://codecov.io/gh/hgibs/cinefiles/
 
 Organizes, indexes, and pulls relevant info for your movie library presented in a clean, locally-resourced, set of webpages.
 
 Installation
 ===============
 
-1) Install `PhantomJS <http://phantomjs.org/>`_
+1) Install `cinefiles`_
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Mac OS X
---------
-
-::
-
-    brew update
-    brew install phantomjs
-    
-    
-Linux
------
-
-::
-
-    sudo apt-get update
-    sudo apt-get install phantomjs
-
-2) Install cinefiles
-^^^^^^^^^^^^^^^^^^^^
 
 ::
 
@@ -46,7 +28,7 @@ NOTE: Folders can contain subfolders with movies in them i.e. => "James Bond Mov
 
 ::
 
-    import cinefiles as cf
+    import cinefiles.cinefiles as cf
     directory = "/Volumes/HDD/Movies"
     search = cf.Cinefiles(searchfolder=directory)
     search.run()
@@ -57,7 +39,7 @@ To rename folders automatically:
 
 ::
 
-    import cinefiles as cf
+    import cinefiles.cinefiles as cf
     directory = "/Volumes/HDD/jumble_of_movies"
     organize = cf.Cinefolders(searchfolder=directory)
     organize.organizefolder()
@@ -69,7 +51,7 @@ To remove all the added files:
 
 ::
 
-    import cinefiles as cf
+    import cinefiles.cinefiles as cf
     clear_run = cf.Cinefiles(configfile='cinefiles.ini')
     clear_run.clear_run.purgecinefiles()
     
