@@ -53,7 +53,7 @@ def test_examplerunA(directoryA, examples, monkeypatch):
         if(item.isdir()):
             if(not item.basename.startswith('cinefiles') or 
                         not item.basename.startswith('.cinefiles')):
-                truthcheck = truthcheck and item.join('index.htm').exists()
+                truthcheck = truthcheck and item.join('/index.htm').exists()
                 
     recurseprint(directoryA)
     assert truthcheck
