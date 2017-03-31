@@ -3,6 +3,7 @@
 # https://packaging.python.org/en/latest/distributing.html
 # https://github.com/pypa/sampleproject
 
+#codecov skip start
 
 # Always prefer setuptools over distutils
 from setuptools import setup, find_packages
@@ -122,3 +123,4 @@ setup(
 #     },
 )
 
+#codecov skip end

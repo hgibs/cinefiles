@@ -3,6 +3,8 @@ import pytest, os, shutil
 import glob
 from pprint import pprint
 
+import cinefiles.cinefiles as cf
+
 def test_import():
     import cinefiles
 
@@ -40,14 +42,9 @@ def test_examplerunA(directoryA, examples, monkeypatch):
     import cinefiles.cinefiles as cf
     import logging
     search = cf.Cinefiles(configfile=str(examples)+'/cinefiles.ini')
-    
     #we must change searchfolder to temporary directory
     search.configdict.update({'searchfolder':str(directoryA)})
-    
     search.run()
-
-    truthcheck = True
-
     #check basic structure
     for item in directoryA.listdir():
         if(item.isdir()):
@@ -55,13 +52,51 @@ def test_examplerunA(directoryA, examples, monkeypatch):
             print(foldername)
             if(foldername != 'cinefiles' and foldername != '.cinefiles'):
                 index = item.join('/index.htm')
-#                 truthcheck = truthcheck and index.exists()
-#                 assert os.path.exists(foldername+'/index.htm')
                 assert index.exists()
                 
 #     recurseprint(directoryA)
     assert truthcheck
     
+@pytest.mark.skipif(os.environ['LOGNAME'] == 'holland',
+                    reason="Don't run on home computer")
+def test_checkarchive(examples, monkeypatch):
+    monkeypatch.chdir(examples)
+    assert examples.join('/5th Element/index.htm').exists()
+    
+@pytest.fixture(scope='function')
+def min_ini(tmpdir_factory):
+    minimal = tmpdir_factory.mktemp('minimal')
+    config = minimal.join('/cinefiles.ini')
+    config.write('[cinefiles]\n searchfolder=none\n')
+    return minimal
+    
+def test_no_args(min_ini,monkeypatch):
+    monkeypatch.chdir(min_ini)
+    tc = cf.Cinefiles()
+    assert tc.configdict['searchfolder'] == 'none'
+
+@pytest.fixture(scope='function')   
+def blank_folder(tmpdir_factory):
+    return tmpdir_factory.mktemp('blank')
+    
+def test_no_conf(blank_folder,monkeypatch):
+    monkeypatch.chdir(blank_folder)
+    with pytest.raises(IOError) as err:
+        tc = cf.Cinefiles()
+    
+@pytest.fixture(scope='function')
+def broken_ini(tmpdir_factory):
+    broken = tmpdir_factory.mktemp('minimal')
+    config = broken.join('/cinefiles.ini')
+    config.write('\n')
+    return broken
+    
+def test_broken_conf(broken_ini,monkeypatch):
+    monkeypatch.chdir(broken_ini)
+    with pytest.raises(ValueError) as err:
+        tc = cf.Cinefiles()
+    
+#codecov ignore start
 def recurseprint(directoryobj,tabnum=0):
     for item in directoryobj.listdir():
         print('\t'*tabnum+item.basename, end='')
@@ -70,3 +105,4 @@ def recurseprint(directoryobj,tabnum=0):
             recurseprint(item,tabnum+1)
         else:
             print('')
+#codecov ignore end

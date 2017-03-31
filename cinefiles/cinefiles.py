@@ -36,6 +36,7 @@ class Cinefiles:
     def __init__(self, *args, **kwargs):
     
         if(running_on_windows() and __init__.__version__[0]!='2'):
+            #codecov skip start
             print(  "I'm sorry, this code does not handle windows "
                     +"file paths correctly, so it cannot run yet. "
                     +"I am deeply sorry for this, please wait until "
@@ -43,6 +44,7 @@ class Cinefiles:
                     +"version get released faster by contributing to "
                     +"this project at github.com/hgibs/cinefiles")
             sys.exit(2)
+            #codecov skip end
     
         logging.getLogger('requests').setLevel(logging.ERROR)
         
@@ -135,12 +137,10 @@ class Cinefiles:
         if os.path.exists(file):
             config.read(file)
         else:
-            print('Config file not found!!')
-            exit()
+            raise IOError('Config file not found!! ('+file+')')
         
         if 'cinefiles' not in config:
-            print("You must have a [cinefiles] section in the config file!!!")
-            exit()
+            raise ValueError("You must have a [cinefiles] section in the config file!!!")
         
          # 'guess','skip','test','force','destroy','debugnum','searchfolder'
         conf = config['cinefiles']
@@ -242,12 +242,14 @@ class Cinefiles:
         self.addedres = False
         self.recursiveupdate(self.installresources, newresources)
         
+        #codecov skip start
         if(running_on_windows() and self.configdict['win_hide']):
             FILE_ATTRIBUTE_HIDDEN = 0x02
             hide = ctypes.windll.kernel32.SetFileAttributesW(newresources,
                                                     FILE_ATTRIBUTE_HIDDEN)
             if not hide: # There was an error.
                 raise ctypes.WinError()
+        #codecov skip end
 
         # if(self.addedres):
 #               logging.info("Added resources to "+resfolder)
@@ -287,7 +289,7 @@ class Cinefiles:
             self.addedres = True
 #                       except FileNotFoundError as e:
 #                           logging.critical('Resource '+entry.path+' not found (')
-        except Exception as e:
+        except IOError as e:
             self.critical(e)
 
 
