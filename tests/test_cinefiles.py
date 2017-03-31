@@ -54,14 +54,21 @@ def test_examplerunA(directoryA, examples, monkeypatch):
                 index = item.join('/index.htm')
                 assert index.exists()
                 
-#     recurseprint(directoryA)
-    assert truthcheck
+@pytest.fixture(scope='session')
+def dirA_complete(tmpdir_factory):
+    testbed = tmpdir_factory.mktemp('testA_complete')
+    for m in movies:
+        tempmovie = testbed.mkdir('/'+m).join('/movie.mp4')
+        tempmovie.write('movie code')
+    search = cf.Cinefiles(searchfolder=str(testbed))
+    search.run()
+    return testbed
     
 @pytest.mark.skipif(os.environ['LOGNAME'] == 'holland',
                     reason="Don't run on home computer")
-def test_checkarchive(examples, monkeypatch):
-    monkeypatch.chdir(examples)
-    assert examples.join('/5th Element/index.htm').exists()
+def test_checkarchive(dirA_complete, monkeypatch):
+    monkeypatch.chdir(dirA_complete)
+    assert dirA_complete.join('/5th Element/index.htm').exists()
     
 @pytest.fixture(scope='function')
 def min_ini(tmpdir_factory):
