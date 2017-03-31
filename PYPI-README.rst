@@ -3,9 +3,8 @@
 cinefiles
 ============
 
-.. image:: https://travis-ci.org/hgibs/cinefiles.svg?branch=master   :target: https://travis-ci.org/hgibs/cinefiles
-
-.. image:: https://img.shields.io/codecov/c/github/hgibs/cinefiles/master.svg   :target: https://codecov.io/gh/hgibs/cinefiles/
+.. image:: https://travis-ci.org/hgibs/cinefiles.svg?branch=master
+.. image:: https://img.shields.io/codecov/c/github/hgibs/cinefiles/master.svg
 
 Organizes, indexes, and pulls relevant info for your movie library presented in a clean, locally-resourced, set of webpages.
 
