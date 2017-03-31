@@ -73,7 +73,9 @@ setup(
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
 #     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
-    packages=['cinefiles'],
+    packages=find_packages('src'),
+    package_dir={'': 'src'},
+    scripts=['bin/cinefiles'],
 
     # Alternatively, if you want to distribute just a my_module.py, uncomment
     # this:
@@ -97,7 +99,7 @@ setup(
     # $ pip install -e .[dev,test]
     extras_require={
         'dev': ['check-manifest'],
-        'test': ['codecov','pytest','pytest-pep8','pytest-cov'],
+        'test': ['codecov','pytest','pytest-pep8','pytest-cov','pytest-console-scripts'],
     },
 
     # If there are data files included in your packages that need to be

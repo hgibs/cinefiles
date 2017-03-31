@@ -1,0 +1,6 @@
+#! /usr/bin/env python3
+
+import sys
+import cinefiles.cinefiles as cf
+
+cf.Cinefiles(sys.argv)

@@ -96,6 +96,12 @@ def test_broken_conf(broken_ini,monkeypatch):
     with pytest.raises(ValueError) as err:
         tc = cf.Cinefiles()
     
+def test_onwindows():
+    assert not cf.running_on_windows()
+    
+def test_main(script_runner):
+    ret = script_runner.run('./cinefiles')
+
 #codecov ignore start
 def recurseprint(directoryobj,tabnum=0):
     for item in directoryobj.listdir():

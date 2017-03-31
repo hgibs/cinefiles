@@ -25,18 +25,11 @@ __version__ = '0.1.4'
 
 __url__ = 'https://github.com/hgibs/cinefiles'
 
-def running_on_windows():
-    if(osname=='nt'):
-        ctypes.windll.kernel32.SetFileAttributesW.argtypes = (
-                                    ctypes.c_wchar_p, ctypes.c_uint32)
-        return True
-    return False
-
 def ImproveMoviesFolderHandler(argv):
     import logging
 
     # defaultFolder = "/Volumes/Holland Gibson Ext HDD/Movies/Movies"
-    defaultFolder = "/Volumes/Holland Gibson Ext HDD/Movies/testbed"
+    defaultFolder = "~/Movies/"
 
     help_string = ( "improve_movies_folder.py -f <folder to improve> [options]  \n"
                   "-h\t\tPrint this help menu\n-f <folder>\tWhich folder to search\n"
@@ -125,8 +118,12 @@ def ImproveMoviesFolderHandler(argv):
       
     search.run()
 
-if __name__ == "__main__":
-  import sys
-  #.improve_movies_folder
-  cinefiles.Cinefiles(sys.argv)
+def running_on_windows():
+    if(osname=='nt'):
+        #codecov skip start
+        ctypes.windll.kernel32.SetFileAttributesW.argtypes = (
+                                    ctypes.c_wchar_p, ctypes.c_uint32)
+        return True
+        #codecov skip end
+    return False
   
