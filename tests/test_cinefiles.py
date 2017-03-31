@@ -69,6 +69,40 @@ def dirA_complete(tmpdir_factory):
 def test_checkarchive(dirA_complete, monkeypatch):
     monkeypatch.chdir(dirA_complete)
     assert dirA_complete.join('/5th Element/index.htm').exists()
+    newsearch = cf.Cinefiles(searchfolder=str(dirA_complete))
+#     newsearch.run()
+    it = os.scandir(str(dirA_complete))
+    for entry in it:
+        if entry.is_dir():
+            subit = os.scandir(entry.path)
+            for subentry in subit:
+                if(subentry.name == 'archive.log' or subentry.name == '.archive.log'):
+                    assert newsearch.checkarchive(subentry)
+
+#all of these movies have all 3 reviews
+moviesB = [ '5th Element','Grand Budapest Hotel, The (2014)',
+            'Interstellar (2014)','Thin Red Line']                    
+
+@pytest.fixture(scope='session')
+def directoryB(tmpdir_factory):
+    testbed = tmpdir_factory.mktemp('testB')
+    for m in moviesB:
+        tempmovie = testbed.mkdir('/'+m).join('/movie.mp4')
+        tempmovie.write('movie code')
+    search = cf.Cinefiles(searchfolder=str(testbed))
+    search.run()
+    return testbed
+
+@pytest.mark.skipif(os.environ['LOGNAME'] == 'holland',
+                    reason="Don't run on home computer")
+def test_metadata(directoryB):
+    newsearch = cf.Cinefiles(searchfolder=str(directoryB))
+    for m in moviesB:
+        pathobj = directoryB.join('/'+m)
+        resultdict = newsearch.getattrfrommetadata(str(pathobj)):
+        print(str(pathobj))
+        for key in resultdict:
+            assert resultdict[key] != ''
     
 @pytest.fixture(scope='function')
 def min_ini(tmpdir_factory):
