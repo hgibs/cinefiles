@@ -30,14 +30,12 @@ from .__init__ import __version__, running_on_windows
 from .tmdb import TMDb
 
 TMDB_API_KEY = 'beb6b398540ccc4245a5b4739186a0bb'
-    
-class Cinefiles:
 
+class Cinefiles:
     def __init__(self, *args, **kwargs):
-    
         if(running_on_windows() and __init__.__version__[0]!='2'):
             #codecov skip start
-            print(  "I'm sorry, this code does not handle windows "
+            print(  "This code does not handle windows "
                     +"file paths correctly, so it cannot run yet. "
                     +"I am deeply sorry for this, please wait until "
                     +"version 2.0 is released. You could help this "

@@ -75,7 +75,9 @@ setup(
 #     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    scripts=['bin/cinefiles'],
+    entry_points = {'console_scripts': ['cinefiles=cinefiles.__main__:main_cfiles',
+                                        'cinefolders=cinefiles.__main__:main_cfolders'],},
+#     scripts=['bin/cinefiles'],
 
     # Alternatively, if you want to distribute just a my_module.py, uncomment
     # this:
@@ -98,7 +100,7 @@ setup(
     # for example:
     # $ pip install -e .[dev,test]
     extras_require={
-        'dev': ['check-manifest'],
+        'dev': ['twine'],
         'test': ['codecov','pytest','pytest-pep8','pytest-cov','pytest-console-scripts'],
     },
 

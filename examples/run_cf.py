@@ -6,4 +6,4 @@ import logging
 search = cf.Cinefiles(configfile='cinefiles.ini')
 # search = cf.Cinefiles()
               
-# search.run()
+search.run()
