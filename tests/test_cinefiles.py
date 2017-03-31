@@ -1,5 +1,8 @@
 import pytest, os, shutil
 
+import glob
+from pprint import pprint
+
 def test_import():
     import cinefiles
 
@@ -51,4 +54,7 @@ def test_examplerunA(directoryA, examples, monkeypatch):
             if(not item.basename.startswith('cinefiles') or 
                         not item.basename.startswith('.cinefiles')):
                 truthcheck = truthcheck and item.join('index.htm').exists()
+                
+    dirlist = glob.glob(str(directoryA)+'/*')
+    pprint(dirlist)
     assert truthcheck
