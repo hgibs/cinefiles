@@ -9,7 +9,7 @@ cinefiles
 
 [![Travis CI](https://travis-ci.org/hgibs/cinefiles.svg?branch=master)](https://travis-ci.org/hgibs/cinefiles)
 
-[![Coverage Status](https://coveralls.io/repos/github/hgibs/cinefiles/badge.svg?branch=master)](https://coveralls.io/github/hgibs/cinefiles?branch=master)
+[![Codecov](https://img.shields.io/codecov/c/github/hgibs/cinefiles/master.svg)](https://codecov.io/gh/hgibs/cinefiles/)
 
 [![pypi version](https://img.shields.io/pypi/v/cinefiles.svg)](https://pypi.python.org/pypi/cinefiles)
 [![# of downloads](https://img.shields.io/pypi/dm/cinefiles.svg)](https://pypi.python.org/pypi/cinefiles)
