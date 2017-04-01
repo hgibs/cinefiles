@@ -744,7 +744,7 @@ class Title:
         self.findyoutubetrailer()
 
         indexnotinarch = self.archivetypes['index'] not in self.archivelist
-        if((indexnotinarch or self.updated) and and not self.configs['force']):
+        if(indexnotinarch or self.updated or self.configs['force']):
             self.getreviews()
             self.writeout()
         else:
