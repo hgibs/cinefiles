@@ -4,12 +4,12 @@ cinefiles
 
 
 [![Travis CI](https://travis-ci.org/hgibs/cinefiles.svg?branch=master)](https://travis-ci.org/hgibs/cinefiles)
-
 [![Codecov](https://img.shields.io/codecov/c/github/hgibs/cinefiles/master.svg)](https://codecov.io/gh/hgibs/cinefiles/)
 
 [![pypi version](https://img.shields.io/pypi/v/cinefiles.svg)](https://pypi.python.org/pypi/cinefiles)
 [![# of downloads](https://img.shields.io/pypi/dm/cinefiles.svg)](https://pypi.python.org/pypi/cinefiles)
 
+[Changelog](https://github.com/hgibs/cinefiles/releases)
 
 Organizes, indexes, and pulls relevant info for your movie library presented in a clean, locally-resourced, set of webpages.
 
@@ -21,20 +21,6 @@ Python 3
 
 Installation
 ------------
-
-### 1) Install [PhantomJS]
-
-#### Mac OS X
-
-    brew update
-    brew install phantomjs
-
-#### Linux
-
-    sudo apt-get update
-    sudo apt-get install phantomjs
-
-### 2) Install cinefiles
 
     pip install cinefiles
 
