@@ -243,9 +243,6 @@ class Cinefiles:
                                                     FILE_ATTRIBUTE_HIDDEN)
             if not hide: # There was an error.
                 raise ctypes.WinError()
-
-        # if(self.addedres):
-#               logging.info("Added resources to "+resfolder)
             
     #this exists as to not replace the folder with copytree() but to add new resources
     #this allows already made indexes to use old files if they still need them
