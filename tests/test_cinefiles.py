@@ -182,6 +182,15 @@ def test_onwindows():
     
 def test_main(script_runner):
     ret = script_runner.run('./cinefiles')
+    
+def test_fullsetup():
+    full = cf.Cinefiles(guess=False,skip=True,test=False,destroy=False,
+                debugnum=3,localresources=False,searchfolder=False)
+    
+    for key in {'guess','skip,test','destroy','localresources','searchfolder'}:
+        assert full.configdict[key] == False
+        
+    assert full.configdict['debugnum'] == 3
 
 def recurseprint(directoryobj,tabnum=0):
     for item in directoryobj.listdir():

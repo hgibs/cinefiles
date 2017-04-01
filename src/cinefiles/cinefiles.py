@@ -85,7 +85,7 @@ class Cinefiles:
             if 'destroy' in kwargs:
                 self.configdict.update({'destroy':kwargs['destroy']})
             if 'debugnum' in kwargs:
-                self.configdict.update({'guess':int(kwargs['debugnum'])})
+                self.configdict.update({'debugnum':int(kwargs['debugnum'])})
             if 'localresources' in kwargs:
                 self.configdict.update({'localresources':kwargs['localresources']})
             if 'searchfolder' in kwargs:
