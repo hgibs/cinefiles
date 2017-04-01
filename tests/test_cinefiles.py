@@ -187,7 +187,7 @@ def test_fullsetup():
     full = cf.Cinefiles(guess=False,skip=True,test=False,destroy=False,
                 debugnum=3,localresources=False,searchfolder=False)
     
-    for key in {'guess','skip,test','destroy','localresources','searchfolder'}:
+    for key in {'guess','skip','test','destroy','localresources','searchfolder'}:
         assert full.configdict[key] == False
         
     assert full.configdict['debugnum'] == 3
