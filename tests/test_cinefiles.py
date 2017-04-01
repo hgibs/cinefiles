@@ -118,7 +118,10 @@ def test_masterindex_imdb(directoryB):
                     reason="Don't run on home computer")            
 def test_masterindex_meta(directoryB):
     masterindex = directoryB.join('/index.htm')
-    tree = html.fromstring(masterindex.readlines())
+    htmlstring = ''
+    for line in masterindex.readlines():
+        htmlstring += line
+    tree = html.fromstring(htmlstring)
     results = tree.xpath('//td[@class="rowmeta"]')
     for r in results:
         assert r.text_content != ''
