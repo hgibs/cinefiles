@@ -103,6 +103,7 @@ def test_metadata(directoryB):
         resultdict = newsearch.getattrfrommetadata(str(pathobj))
         print(str(pathobj))
         for key in resultdict:
+            print(key)
             assert resultdict[key] != ''
 
 @pytest.mark.skipif(os.environ['LOGNAME'] == 'holland',
