@@ -184,7 +184,7 @@ def test_main(script_runner):
     ret = script_runner.run('./cinefiles')
     
 def test_fullsetup():
-    full = cf.Cinefiles(guess=False,skip=True,test=False,destroy=False,
+    full = cf.Cinefiles(guess=False,skip=False,test=False,destroy=False,
                 debugnum=3,localresources=False,searchfolder=False)
     
     for key in {'guess','skip','test','destroy','localresources','searchfolder'}:
