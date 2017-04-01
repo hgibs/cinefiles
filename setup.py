@@ -71,8 +71,9 @@ setup(
     package_dir={'': 'src'},
 #     package_data={'': ['src/cinefiles/resources']},
     include_package_data=True,
-#     entry_points = {'console_scripts': ['cinefiles=cinefiles.__main__:main_cfiles',
-#                                         'cinefolders=cinefiles.__main__:main_cfolders'],},
+#     entry_points = {'console_scripts': 
+#                         ['cinefiles=cinefiles.__main__:main_cfiles',
+#                         'cinefolders=cinefiles.__main__:main_cfolders'],},
 
     install_requires=[  'requests<3,>=2.4.3',
                         'youtube_dl>=2017.2.17',
@@ -85,7 +86,8 @@ setup(
     # $ pip install -e .[dev,test]
     extras_require={
         'dev': ['twine'],
-        'test': ['codecov','pytest','pytest-pep8','pytest-cov','pytest-console-scripts'],
+        'test': ['codecov','pytest','pytest-pep8','pytest-cov',
+                'pytest-console-scripts'],
     },
 )
 #codecov skip end
