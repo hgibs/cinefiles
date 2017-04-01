@@ -85,7 +85,7 @@ setup(
     
     # $ pip install -e .[dev,test]
     extras_require={
-        'dev': ['twine'],
+        'dev': ['twine','wheel'],
         'test': ['codecov','pytest','pytest-pep8','pytest-cov',
                 'pytest-console-scripts'],
     },
