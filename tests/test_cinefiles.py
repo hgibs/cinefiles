@@ -181,7 +181,6 @@ def test_onwindows():
 def test_main(script_runner):
     ret = script_runner.run('./cinefiles')
 
-#codecov ignore start
 def recurseprint(directoryobj,tabnum=0):
     for item in directoryobj.listdir():
         print('\t'*tabnum+item.basename, end='')
@@ -190,4 +189,3 @@ def recurseprint(directoryobj,tabnum=0):
             recurseprint(item,tabnum+1)
         else:
             print('')
-#codecov ignore end

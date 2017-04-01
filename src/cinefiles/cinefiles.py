@@ -34,16 +34,13 @@ TMDB_API_KEY = 'beb6b398540ccc4245a5b4739186a0bb'
 class Cinefiles:
     def __init__(self, *args, **kwargs):
         if(running_on_windows() and __init__.__version__[0]!='2'):
-            #codecov skip start
             print(  "This code does not handle windows "
                     +"file paths correctly, so it cannot run yet. "
                     +"I am deeply sorry for this, please wait until "
                     +"version 2.0 is released. You could help this "
                     +"version get released faster by contributing to "
                     +"this project at github.com/hgibs/cinefiles")
-            sys.exit(2)
-            #codecov skip end
-    
+            sys.exit(2)    
         logging.getLogger('requests').setLevel(logging.ERROR)
         
         self.configdict = { 'guess':True, 
@@ -240,14 +237,12 @@ class Cinefiles:
         self.addedres = False
         self.recursiveupdate(self.installresources, newresources)
         
-        #codecov skip start
         if(running_on_windows() and self.configdict['win_hide']):
             FILE_ATTRIBUTE_HIDDEN = 0x02
             hide = ctypes.windll.kernel32.SetFileAttributesW(newresources,
                                                     FILE_ATTRIBUTE_HIDDEN)
             if not hide: # There was an error.
                 raise ctypes.WinError()
-        #codecov skip end
 
         # if(self.addedres):
 #               logging.info("Added resources to "+resfolder)
