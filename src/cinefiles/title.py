@@ -109,6 +109,8 @@ class Title:
             
         self.title = self.movie.title
         
+        self.updated = False
+        
         
     def prephtml(self):
         self.rogerratingvalue = '0_0'
@@ -331,6 +333,7 @@ class Title:
             logging.warn(str(e))
             self.trailerfile=''
 
+        self.updated = self.trailersuccess
 
 
     ###################
@@ -451,6 +454,7 @@ class Title:
         #     logging.debug('poster in dict>'+str(booleq))
         if (not self.archivetypes['poster'] in self.archivelist) and (not self.configs['force']):  
             self.saveimage(url)
+            self.updated = True
         else:
             logging.info('Skipping poster download')
             tempstr = self.archivelist[self.archivetypes['poster']]
@@ -739,8 +743,8 @@ class Title:
         self.getposter(self.movie.poster_path)
         self.findyoutubetrailer()
 
-        if (self.archivetypes['index'] not in self.archivelist
-                and not self.configs['force']):
+        indexnotinarch = self.archivetypes['index'] not in self.archivelist
+        if((indexnotinarch or self.updated) and and not self.configs['force']):
             self.getreviews()
             self.writeout()
         else:
