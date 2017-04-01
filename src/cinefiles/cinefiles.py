@@ -400,7 +400,10 @@ class Cinefiles:
         if(newname != ''):
             print("> ",end='',flush=True)
             guessattr = guessit(en.name)
-            title = guessattr['title']
+            if('title' in guessattr):
+                title = guessattr['title']
+            else:
+                title = en.name
             if('year' in guessattr):
                 year = guessattr['year']
         else:
