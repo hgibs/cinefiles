@@ -1,0 +1,852 @@
+{
+  "runtime" : 130,
+  "status" : "Released",
+  "backdrop_path" : "\/k4BAPrE5WkNLvpsPsiMfu8W4Zyi.jpg",
+  "overview" : "City of God depicts the raw violence in the ghettos of Rio de Janeiro. In the 1970’s that kids are carrying guns and joining gangs when they should be playing hide-and-seek.",
+  "title" : "City of God",
+  "vote_count" : 1388,
+  "tagline" : "If you run you're dead...if you stay, you're dead again. Period.",
+  "belongs_to_collection" : null,
+  "alternative_titles" : {
+    "titles" : [
+      {
+        "title" : "Город бога",
+        "iso_3166_1" : "RU"
+      },
+      {
+        "title" : "City of God - La città di Dio",
+        "iso_3166_1" : "IT"
+      },
+      {
+        "title" : "Cidade de Deus",
+        "iso_3166_1" : "BR"
+      },
+      {
+        "title" : "La cité de Dieu",
+        "iso_3166_1" : "FR"
+      },
+      {
+        "title" : "上帝之城",
+        "iso_3166_1" : "CN"
+      },
+      {
+        "title" : "无主之城",
+        "iso_3166_1" : "HK"
+      },
+      {
+        "title" : "City of God",
+        "iso_3166_1" : "US"
+      },
+      {
+        "title" : "無法無天",
+        "iso_3166_1" : "TW"
+      },
+      {
+        "title" : "Ciudad de Dios",
+        "iso_3166_1" : "MX"
+      },
+      {
+        "title" : "Tanrinin Sheheri",
+        "iso_3166_1" : "AZ"
+      },
+      {
+        "title" : "Mesto bohu",
+        "iso_3166_1" : "CZ"
+      },
+      {
+        "title" : "시티 오브 갓",
+        "iso_3166_1" : "KR"
+      }
+    ]
+  },
+  "images" : {
+    "backdrops" : [
+      {
+        "height" : 1080,
+        "vote_count" : 10,
+        "file_path" : "\/k4BAPrE5WkNLvpsPsiMfu8W4Zyi.jpg",
+        "width" : 1920,
+        "aspect_ratio" : 1.77777777777778,
+        "iso_639_1" : null,
+        "vote_average" : 5.538
+      },
+      {
+        "height" : 1080,
+        "vote_count" : 2,
+        "file_path" : "\/3SrMXxMpNna9uvZsw8Q1pV9ayoL.jpg",
+        "width" : 1920,
+        "aspect_ratio" : 1.77777777777778,
+        "iso_639_1" : null,
+        "vote_average" : 5.384
+      },
+      {
+        "height" : 862,
+        "vote_count" : 9,
+        "file_path" : "\/hSaH9tt67bozo9K50sbH0s4YjEc.jpg",
+        "width" : 1532,
+        "aspect_ratio" : 1.77726218097448,
+        "iso_639_1" : null,
+        "vote_average" : 5.358
+      },
+      {
+        "height" : 720,
+        "vote_count" : 9,
+        "file_path" : "\/wBTfzp1x4TmnDh4P55ioXNYtNTa.jpg",
+        "width" : 1280,
+        "aspect_ratio" : 1.77777777777778,
+        "iso_639_1" : null,
+        "vote_average" : 5.358
+      },
+      {
+        "height" : 1080,
+        "vote_count" : 9,
+        "file_path" : "\/uAJkCmS0Rg7vwTKUKbR80Q2tyIC.jpg",
+        "width" : 1920,
+        "aspect_ratio" : 1.77777777777778,
+        "iso_639_1" : null,
+        "vote_average" : 5.28439153439153
+      },
+      {
+        "height" : 1080,
+        "vote_count" : 2,
+        "file_path" : "\/yY5wlQih8R6e7IX1kXFBayhTLvH.jpg",
+        "width" : 1920,
+        "aspect_ratio" : 1.77777777777778,
+        "iso_639_1" : null,
+        "vote_average" : 5.23
+      },
+      {
+        "height" : 1080,
+        "vote_count" : 2,
+        "file_path" : "\/1lJalWV6xvoXaeU0bvTGb3Ma26J.jpg",
+        "width" : 1920,
+        "aspect_ratio" : 1.77777777777778,
+        "iso_639_1" : null,
+        "vote_average" : 5.23
+      },
+      {
+        "height" : 720,
+        "vote_count" : 1,
+        "file_path" : "\/iEXK18sjk6FMWqEqMEg49UHKEz1.jpg",
+        "width" : 1280,
+        "aspect_ratio" : 1.77777777777778,
+        "iso_639_1" : null,
+        "vote_average" : 5.18601190476191
+      },
+      {
+        "height" : 720,
+        "vote_count" : 6,
+        "file_path" : "\/jeRxSxEqliXdP0dXHXSLEgA6ZPp.jpg",
+        "width" : 1280,
+        "aspect_ratio" : 1.77777777777778,
+        "iso_639_1" : null,
+        "vote_average" : 5.14837819185645
+      },
+      {
+        "height" : 1080,
+        "vote_count" : 3,
+        "file_path" : "\/7ykBZ8IJohJsDSdASQsmLCB2jgX.jpg",
+        "width" : 1920,
+        "aspect_ratio" : 1.77777777777778,
+        "iso_639_1" : "en",
+        "vote_average" : 5.04329004329004
+      },
+      {
+        "height" : 720,
+        "vote_count" : 0,
+        "file_path" : "\/xwR7bMQ8TDsHTQ0syaCE8jonVHw.jpg",
+        "width" : 1280,
+        "aspect_ratio" : 1.77777777777778,
+        "iso_639_1" : null,
+        "vote_average" : 0
+      }
+    ],
+    "posters" : [
+      {
+        "height" : 1500,
+        "vote_count" : 23,
+        "file_path" : "\/gCqnQaq8T4CfioP9uETLx9iMJF4.jpg",
+        "width" : 1000,
+        "aspect_ratio" : 0.666666666666667,
+        "iso_639_1" : "en",
+        "vote_average" : 5.41528239202658
+      },
+      {
+        "height" : 2950,
+        "vote_count" : 26,
+        "file_path" : "\/sxmY85UrSYN4y8sZSzO9LKpPgSA.jpg",
+        "width" : 2000,
+        "aspect_ratio" : 0.677966101694915,
+        "iso_639_1" : "en",
+        "vote_average" : 5.36650615302301
+      },
+      {
+        "height" : 1500,
+        "vote_count" : 5,
+        "file_path" : "\/qQ05XhFstOCcxI7PJkbCXX4MpFM.jpg",
+        "width" : 1000,
+        "aspect_ratio" : 0.666666666666667,
+        "iso_639_1" : "en",
+        "vote_average" : 5.18207282913165
+      },
+      {
+        "height" : 1500,
+        "vote_count" : 14,
+        "file_path" : "\/mwDnSQR1CkxuDjSKfgiNT0sIOjM.jpg",
+        "width" : 1000,
+        "aspect_ratio" : 0.666666666666667,
+        "iso_639_1" : "en",
+        "vote_average" : 5.16388373531231
+      },
+      {
+        "height" : 1500,
+        "vote_count" : 7,
+        "file_path" : "\/3qJKUKh80c9334Vthaga3IKrlsw.jpg",
+        "width" : 1000,
+        "aspect_ratio" : 0.666666666666667,
+        "iso_639_1" : "en",
+        "vote_average" : 5.14965986394558
+      },
+      {
+        "height" : 1500,
+        "vote_count" : 10,
+        "file_path" : "\/iB1MiKFvCJI6AOcE7eCsD4Vrodo.jpg",
+        "width" : 1017,
+        "aspect_ratio" : 0.678,
+        "iso_639_1" : "en",
+        "vote_average" : 5.14024787997391
+      },
+      {
+        "height" : 1200,
+        "vote_count" : 4,
+        "file_path" : "\/618UxkSl7iqSnN1iTMs6vjIWvrA.jpg",
+        "width" : 800,
+        "aspect_ratio" : 0.666666666666667,
+        "iso_639_1" : "en",
+        "vote_average" : 5.11016346837242
+      },
+      {
+        "height" : 1200,
+        "vote_count" : 0,
+        "file_path" : "\/ue4y5Qm40pOTTiEkDmW311kYPtS.jpg",
+        "width" : 800,
+        "aspect_ratio" : 0.666666666666667,
+        "iso_639_1" : "en",
+        "vote_average" : 0
+      }
+    ]
+  },
+  "original_title" : "Cidade de Deus",
+  "original_language" : "pt",
+  "poster_path" : "\/gCqnQaq8T4CfioP9uETLx9iMJF4.jpg",
+  "production_countries" : [
+    {
+      "name" : "Brazil",
+      "iso_3166_1" : "BR"
+    },
+    {
+      "name" : "France",
+      "iso_3166_1" : "FR"
+    }
+  ],
+  "revenue" : 27387381,
+  "homepage" : "http:\/\/cidadededeus.globo.com\/",
+  "video" : false,
+  "imdb_id" : "tt0317248",
+  "id" : 598,
+  "release_date" : "2002-02-05",
+  "budget" : 3300000,
+  "popularity" : 1.718078,
+  "genres" : [
+    {
+      "id" : 18,
+      "name" : "Drama"
+    },
+    {
+      "id" : 80,
+      "name" : "Crime"
+    }
+  ],
+  "production_companies" : [
+    {
+      "name" : "O2 Filmes",
+      "id" : 345
+    },
+    {
+      "name" : "VideoFilmes",
+      "id" : 346
+    },
+    {
+      "name" : "Wild Bunch",
+      "id" : 856
+    },
+    {
+      "name" : "Globo filmes",
+      "id" : 10954
+    },
+    {
+      "name" : "Lumiere",
+      "id" : 11444
+    },
+    {
+      "name" : "Hank Levine Film",
+      "id" : 11445
+    },
+    {
+      "name" : "Lereby Productions",
+      "id" : 11446
+    }
+  ],
+  "videos" : {
+    "results" : [
+      {
+        "site" : "YouTube",
+        "id" : "54b4c3cf9251417472008403",
+        "size" : 360,
+        "iso_639_1" : "en",
+        "key" : "_mDvXaRJcTM",
+        "iso_3166_1" : "US",
+        "name" : "City Of God",
+        "type" : "Trailer"
+      },
+      {
+        "site" : "YouTube",
+        "id" : "533ec655c3a3685448000465",
+        "size" : 360,
+        "iso_639_1" : "en",
+        "key" : "ioUE_5wpg_E",
+        "iso_3166_1" : "US",
+        "name" : "Trailer 1",
+        "type" : "Trailer"
+      }
+    ]
+  },
+  "credits" : {
+    "crew" : [
+      {
+        "name" : "Fernando Meirelles",
+        "id" : 8557,
+        "profile_path" : "\/j77Z3f2m0e211ocFhPJu5ZiO12R.jpg",
+        "credit_id" : "52fe425ac3a36847f8017a9f",
+        "department" : "Directing",
+        "job" : "Director"
+      },
+      {
+        "name" : "Paulo Lins",
+        "id" : 8560,
+        "profile_path" : "\/l2QLUwbr9bOviiLW0iDx2dQciCF.jpg",
+        "credit_id" : "52fe425ac3a36847f8017aa5",
+        "department" : "Writing",
+        "job" : "Author"
+      },
+      {
+        "name" : "Bráulio Mantovani",
+        "id" : 8561,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017aab",
+        "department" : "Writing",
+        "job" : "Screenplay"
+      },
+      {
+        "name" : "Andrea Barata Ribeiro",
+        "id" : 8562,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017ab1",
+        "department" : "Production",
+        "job" : "Producer"
+      },
+      {
+        "name" : "Mauricio Andrade Ramos",
+        "id" : 8563,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017ab7",
+        "department" : "Production",
+        "job" : "Producer"
+      },
+      {
+        "name" : "Elisa Tolomelli",
+        "id" : 8564,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017abd",
+        "department" : "Production",
+        "job" : "Executive Producer"
+      },
+      {
+        "name" : "Bel Berlinck",
+        "id" : 8565,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017ac3",
+        "department" : "Production",
+        "job" : "Executive Producer"
+      },
+      {
+        "name" : "Marc Beauchamps",
+        "id" : 8566,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017ac9",
+        "department" : "Production",
+        "job" : "Producer"
+      },
+      {
+        "name" : "Daniel Filho",
+        "id" : 8568,
+        "profile_path" : "\/q92xPOOiNzyy6GRQMIkD9Fcn21y.jpg",
+        "credit_id" : "52fe425ac3a36847f8017acf",
+        "department" : "Production",
+        "job" : "Producer"
+      },
+      {
+        "name" : "Hank Levine",
+        "id" : 8569,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017ad5",
+        "department" : "Production",
+        "job" : "Producer"
+      },
+      {
+        "name" : "Vincent Maraval",
+        "id" : 8570,
+        "profile_path" : "\/rKMRdWZSusKHwwFax0wX3DvmapE.jpg",
+        "credit_id" : "52fe425ac3a36847f8017adb",
+        "department" : "Production",
+        "job" : "Producer"
+      },
+      {
+        "name" : "Donald Ranvaud",
+        "id" : 8571,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017ae1",
+        "department" : "Production",
+        "job" : "Producer"
+      },
+      {
+        "name" : "Juliette Renaud",
+        "id" : 8572,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017ae7",
+        "department" : "Production",
+        "job" : "Producer"
+      },
+      {
+        "name" : "Walter Salles",
+        "id" : 8574,
+        "profile_path" : "\/k3XHgm0f9nJK3ugilBqlm0tHfsw.jpg",
+        "credit_id" : "52fe425ac3a36847f8017aed",
+        "department" : "Production",
+        "job" : "Producer"
+      },
+      {
+        "name" : "Ed Cortês",
+        "id" : 8575,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017af3",
+        "department" : "Sound",
+        "job" : "Original Music Composer"
+      },
+      {
+        "name" : "Antonio Pinto",
+        "id" : 8576,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017af9",
+        "department" : "Sound",
+        "job" : "Original Music Composer"
+      },
+      {
+        "name" : "César Charlone",
+        "id" : 8577,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017aff",
+        "department" : "Camera",
+        "job" : "Director of Photography"
+      },
+      {
+        "name" : "Daniel Rezende",
+        "id" : 8578,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017b05",
+        "department" : "Editing",
+        "job" : "Editor"
+      },
+      {
+        "name" : "Tulé Peak",
+        "id" : 8579,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017b0b",
+        "department" : "Art",
+        "job" : "Production Design"
+      },
+      {
+        "name" : "Bia Salgado",
+        "id" : 8581,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017b11",
+        "department" : "Costume & Make-Up",
+        "job" : "Costume Design"
+      },
+      {
+        "name" : "Inês Salgado",
+        "id" : 8583,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017b1d",
+        "department" : "Costume & Make-Up",
+        "job" : "Costume Design"
+      },
+      {
+        "name" : "Anna Van Steen",
+        "id" : 8584,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017b23",
+        "department" : "Costume & Make-Up",
+        "job" : "Makeup Artist"
+      },
+      {
+        "name" : "René Bittencourt",
+        "id" : 8587,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017b2f",
+        "department" : "Production",
+        "job" : "Production Manager"
+      },
+      {
+        "name" : "Claudine Franco",
+        "id" : 8588,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017b35",
+        "department" : "Production",
+        "job" : "Production Manager"
+      },
+      {
+        "name" : "Renato Batata",
+        "id" : 8593,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017b3b",
+        "department" : "Visual Effects",
+        "job" : "Visual Effects Supervisor"
+      },
+      {
+        "name" : "Francisco Bispo",
+        "id" : 8594,
+        "profile_path" : null,
+        "credit_id" : "52fe425ac3a36847f8017b41",
+        "department" : "Visual Effects",
+        "job" : "Creature Design"
+      },
+      {
+        "name" : "Paulo Lins",
+        "id" : 8560,
+        "profile_path" : "\/l2QLUwbr9bOviiLW0iDx2dQciCF.jpg",
+        "credit_id" : "52fe425ac3a36847f8017b77",
+        "department" : "Writing",
+        "job" : "Screenplay"
+      },
+      {
+        "name" : "Kátia Lund",
+        "id" : 8559,
+        "profile_path" : null,
+        "credit_id" : "54b413a89251417369002c0b",
+        "department" : "Directing",
+        "job" : "Director"
+      },
+      {
+        "name" : "Lisa Geffcken-Reinhard",
+        "id" : 8807,
+        "profile_path" : null,
+        "credit_id" : "5638effdc3a3681b5901f2d3",
+        "department" : "Editing",
+        "job" : "Dialogue Editor"
+      },
+      {
+        "name" : "Martín Hernández",
+        "id" : 1462845,
+        "profile_path" : null,
+        "credit_id" : "5638f0359251413b13001762",
+        "department" : "Sound",
+        "job" : "Sound Designer"
+      },
+      {
+        "name" : "Rudy Pi",
+        "id" : 1531278,
+        "profile_path" : null,
+        "credit_id" : "5638f074c3a3681b5201f752",
+        "department" : "Sound",
+        "job" : "Sound Re-Recording Mixer"
+      },
+      {
+        "name" : "Unsun Song",
+        "id" : 1531279,
+        "profile_path" : null,
+        "credit_id" : "5638f0c6c3a3681b5c021928",
+        "department" : "Crew",
+        "job" : "Sound Recordist"
+      },
+      {
+        "name" : "Roland N. Thai",
+        "id" : 16994,
+        "profile_path" : null,
+        "credit_id" : "5638f0efc3a3681b4b01dcc6",
+        "department" : "Sound",
+        "job" : "Sound Effects Editor"
+      },
+      {
+        "name" : "Fabricio Tadeu\t",
+        "id" : 1016216,
+        "profile_path" : null,
+        "credit_id" : "5638f18c925141285701f943",
+        "department" : "Camera",
+        "job" : "Steadicam Operator"
+      },
+      {
+        "name" : "Pablo Hoffmann",
+        "id" : 1641088,
+        "profile_path" : null,
+        "credit_id" : "57c84dc7c3a3684e0a000168",
+        "department" : "Camera",
+        "job" : "First Assistant Camera"
+      }
+    ],
+    "cast" : [
+      {
+        "character" : "Buscapé",
+        "id" : 8595,
+        "order" : 0,
+        "cast_id" : 34,
+        "profile_path" : "\/eUjKOcnzxyRVVqUBIaD8XSvLRi2.jpg",
+        "name" : "Alexandre Rodrigues",
+        "credit_id" : "52fe425ac3a36847f8017b45"
+      },
+      {
+        "character" : "Zé Pequeno",
+        "id" : 8596,
+        "order" : 1,
+        "cast_id" : 35,
+        "profile_path" : "\/48NdifM6zrKXN1fuxakDBbLzkMS.jpg",
+        "name" : "Leandro Firmino",
+        "credit_id" : "52fe425ac3a36847f8017b49"
+      },
+      {
+        "character" : "Bené",
+        "id" : 8597,
+        "order" : 2,
+        "cast_id" : 36,
+        "profile_path" : "\/8L5lBj4ofetMHS8IRdiH3LlRobY.jpg",
+        "name" : "Phellipe Haagensen",
+        "credit_id" : "52fe425ac3a36847f8017b4d"
+      },
+      {
+        "character" : "Dadinho",
+        "id" : 8598,
+        "order" : 3,
+        "cast_id" : 37,
+        "profile_path" : "\/xJpYzsRSahfdTNdKmB0V6hR3JgJ.jpg",
+        "name" : "Douglas Silva",
+        "credit_id" : "52fe425ac3a36847f8017b51"
+      },
+      {
+        "character" : "Cabeleira",
+        "id" : 8599,
+        "order" : 4,
+        "cast_id" : 38,
+        "profile_path" : "\/ed90WrhfZvIt4u9BWRQbEOHWvmQ.jpg",
+        "name" : "Jonathan Haagensen",
+        "credit_id" : "52fe425ac3a36847f8017b55"
+      },
+      {
+        "character" : "Sandro Cenoura",
+        "id" : 8600,
+        "order" : 5,
+        "cast_id" : 39,
+        "profile_path" : "\/lJMLW3NAJbV7AzHDz178HKSiuN5.jpg",
+        "name" : "Matheus Nachtergaele",
+        "credit_id" : "52fe425ac3a36847f8017b59"
+      },
+      {
+        "character" : "Mané Galinha",
+        "id" : 5659,
+        "order" : 6,
+        "cast_id" : 40,
+        "profile_path" : "\/ggUYDS85gpTLAXaDzznLw2mpTfS.jpg",
+        "name" : "Seu Jorge",
+        "credit_id" : "52fe425ac3a36847f8017b5d"
+      },
+      {
+        "character" : "Alicate",
+        "id" : 8601,
+        "order" : 7,
+        "cast_id" : 41,
+        "profile_path" : null,
+        "name" : "Jefechander Suplino",
+        "credit_id" : "52fe425ac3a36847f8017b61"
+      },
+      {
+        "character" : "Angélica",
+        "id" : 8602,
+        "order" : 8,
+        "cast_id" : 42,
+        "profile_path" : "\/txXdD7DxrzC71cDschQcDtTDwc2.jpg",
+        "name" : "Alice Braga",
+        "credit_id" : "52fe425ac3a36847f8017b65"
+      },
+      {
+        "character" : "Berenice",
+        "id" : 8603,
+        "order" : 9,
+        "cast_id" : 43,
+        "profile_path" : "\/51ZgUmSAa1a16woOgzw4NMpioOl.jpg",
+        "name" : "Roberta Rodrigues",
+        "credit_id" : "52fe425ac3a36847f8017b69"
+      },
+      {
+        "character" : "Buscapé Criança",
+        "id" : 8604,
+        "order" : 10,
+        "cast_id" : 44,
+        "profile_path" : null,
+        "name" : "Luis Otávio",
+        "credit_id" : "52fe425ac3a36847f8017b6d"
+      },
+      {
+        "character" : "Filé-com-Fritas",
+        "id" : 8605,
+        "order" : 11,
+        "cast_id" : 45,
+        "profile_path" : "\/u8OcJOmu15xErdpn3BMV8I8ajhS.jpg",
+        "name" : "Darlan Cunha",
+        "credit_id" : "52fe425ac3a36847f8017b71"
+      },
+      {
+        "character" : "Lampião",
+        "id" : 50362,
+        "order" : 12,
+        "cast_id" : 48,
+        "profile_path" : "\/2QrPAoTAtgIY69UvJUNWT62moLc.jpg",
+        "name" : "Thiago Martins",
+        "credit_id" : "55e4850c92514137da004986"
+      },
+      {
+        "character" : "Paraíba - Shorty",
+        "id" : 55105,
+        "order" : 13,
+        "cast_id" : 49,
+        "profile_path" : "\/qpsnP2jABuSQWNVfQVl8gEfqfkq.jpg",
+        "name" : "Gero Camilo",
+        "credit_id" : "55e485bb92514137e90046f6"
+      },
+      {
+        "character" : "Thiago - Tiago",
+        "id" : 1372457,
+        "order" : 14,
+        "cast_id" : 50,
+        "profile_path" : "\/cbY7Yy3GEzxIxfhBGtKqSEOVXTA.jpg",
+        "name" : "Daniel Zettel",
+        "credit_id" : "55e485e992514137d70046c2"
+      },
+      {
+        "character" : "Tio Sam - Uncle Sam",
+        "id" : 1181464,
+        "order" : 15,
+        "cast_id" : 51,
+        "profile_path" : null,
+        "name" : "Charles Paraventi",
+        "credit_id" : "55e48612c3a3684191004eb2"
+      },
+      {
+        "character" : "Vizinha do Paraíba - Shorty's Neighbor",
+        "id" : 560263,
+        "order" : 16,
+        "cast_id" : 52,
+        "profile_path" : "\/kAXd12zmsuzUlTO4DzmwBA0bcF9.jpg",
+        "name" : "Danielle Ornelas",
+        "credit_id" : "55e48644c3a36841970048d9"
+      },
+      {
+        "character" : "Caixa Baixa - Runts",
+        "id" : 1245030,
+        "order" : 17,
+        "cast_id" : 53,
+        "profile_path" : null,
+        "name" : "Micael Borges",
+        "credit_id" : "55e48687c3a3684185004684"
+      },
+      {
+        "character" : "Bando Zé Pequeno - Li'l Zé's Gang",
+        "id" : 403249,
+        "order" : 18,
+        "cast_id" : 54,
+        "profile_path" : null,
+        "name" : "Lúcio Andrey",
+        "credit_id" : "55e48753c3a36841850046ab"
+      },
+      {
+        "character" : "Bando Zé Pequeno - Li'l Zé's Gang",
+        "id" : 1206910,
+        "order" : 19,
+        "cast_id" : 55,
+        "profile_path" : "\/nbxY2jJY1jQNpTT64gw0cnjPcQa.jpg",
+        "name" : "Marcello Melo Jr.",
+        "credit_id" : "55e487a6c3a368272a00067b"
+      },
+      {
+        "character" : "Grande",
+        "id" : 558258,
+        "order" : 20,
+        "cast_id" : 56,
+        "profile_path" : "\/wUlP8H4kWN3iKV0RKjcLnTbPlOa.jpg",
+        "name" : "Babú Santana",
+        "credit_id" : "55e48a74c3a3684185004727"
+      },
+      {
+        "character" : "Mulher do Neguinho",
+        "id" : 444956,
+        "order" : 21,
+        "cast_id" : 57,
+        "profile_path" : null,
+        "name" : "Mary Sheila",
+        "credit_id" : "55e48ac6c3a368418500474f"
+      },
+      {
+        "character" : "Pastor da Igreja",
+        "id" : 8560,
+        "order" : 22,
+        "cast_id" : 58,
+        "profile_path" : "\/l2QLUwbr9bOviiLW0iDx2dQciCF.jpg",
+        "name" : "Paulo Lins",
+        "credit_id" : "55e48af292514137da004a83"
+      },
+      {
+        "character" : "Recepcionista do Motel",
+        "id" : 54998,
+        "order" : 23,
+        "cast_id" : 59,
+        "profile_path" : "\/pVrNfmufoLRAWFoJsjloYI4Ye0L.jpg",
+        "name" : "Olivia Araújo",
+        "credit_id" : "55e48b43c3a3684191004fb9"
+      },
+      {
+        "character" : "Marina Cintra",
+        "id" : 54996,
+        "order" : 24,
+        "cast_id" : 68,
+        "profile_path" : "\/4OPux1pguFd19yXw5WMxKpSaUCB.jpg",
+        "name" : "Graziella Moretto",
+        "credit_id" : "57e57f98925141414f001076"
+      },
+      {
+        "character" : "Newspaper Employee (uncredited)",
+        "id" : 8579,
+        "order" : 25,
+        "cast_id" : 60,
+        "profile_path" : null,
+        "name" : "Tulé Peak",
+        "credit_id" : "55e48b9ac3a368418b0045f4"
+      }
+    ]
+  },
+  "adult" : false,
+  "spoken_languages" : [
+    {
+      "name" : "Português",
+      "iso_639_1" : "pt"
+    }
+  ],
+  "vote_average" : 8.1
+}

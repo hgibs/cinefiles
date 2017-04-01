@@ -227,6 +227,19 @@ footer {
   margin-top: 2px;
 }
 
+.attribution {
+/*   408x161 */
+/* 
+  background-image: url("images/tmdb-attribution-rectangle.png");
+  background-repeat: no-repeat;
+  background-position: center;
+ */
+  margin-right: 15px;
+  height: 54px;
+  width: 136px;
+  float: right;
+}
+
 /*! normalize.css v5.0.0 | MIT License | github.com/necolas/normalize.css */
 
 /**

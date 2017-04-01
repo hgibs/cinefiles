@@ -6,16 +6,16 @@ import html.parser
 import datetime
 import logging
 import filecmp
+import ctypes
 import configparser
 from time import strftime
-from imdbparser import IMDb
-#from PIL import Image # pip3 install pillow
 import tkinter as tk #GUI options
 from shutil import copy2, rmtree
 import filecmp, mimetypes
 from guessit import guessit
 from io import open as iopen
 from platform import system
+import traceback
 
 ### Could thread this because it is a SO SLOOWWW
 
@@ -23,11 +23,25 @@ from platform import system
 ### aren't instantiating it for every movie poster
 
 
-from . import title, templatex
-    
-class Cinefiles:
+from . import title, templatex, googlesearch
 
+from .__init__ import __version__, running_on_windows
+
+from .tmdb import TMDb
+
+TMDB_API_KEY = 'beb6b398540ccc4245a5b4739186a0bb'
+
+class Cinefiles:
     def __init__(self, *args, **kwargs):
+        if(running_on_windows() and __init__.__version__[0]!='2'):
+            print(  "This code does not handle windows "
+                    +"file paths correctly, so it cannot run yet. "
+                    +"I am deeply sorry for this, please wait until "
+                    +"version 2.0 is released. You could help this "
+                    +"version get released faster by contributing to "
+                    +"this project at github.com/hgibs/cinefiles")
+            sys.exit(2)    
+        logging.getLogger('requests').setLevel(logging.ERROR)
         
         self.configdict = { 'guess':True, 
                             'skip':False, 
@@ -36,7 +50,10 @@ class Cinefiles:
                             'destroy':False,
                             'debugnum':logging.INFO,
                             'localresources':True,
-                            'searchfolder':''}
+                            'searchfolder':'',
+                            'def_lang':'en',
+                            'def_region':'US',
+                            'win_hide':True,}
                                                 
         self.matches = []
         self.choices = []
@@ -44,7 +61,6 @@ class Cinefiles:
         self.indexlist = []
         
         self.structnames = {'hiddenresfolder':'.cinefiles',
-                            'hiddencompletelog':'complete.log',
                             'archive':'.archive.log'}
         
         if len(kwargs) == 0:
@@ -69,7 +85,7 @@ class Cinefiles:
             if 'destroy' in kwargs:
                 self.configdict.update({'destroy':kwargs['destroy']})
             if 'debugnum' in kwargs:
-                self.configdict.update({'guess':int(kwargs['debugnum'])})
+                self.configdict.update({'debugnum':int(kwargs['debugnum'])})
             if 'localresources' in kwargs:
                 self.configdict.update({'localresources':kwargs['localresources']})
             if 'searchfolder' in kwargs:
@@ -97,23 +113,29 @@ class Cinefiles:
                 self.allowedvideoextensions.append(ext)
                 
         self.onceprintentry=None
+        
+        self.tmdb = TMDb(TMDB_API_KEY,
+                        self.configdict['def_lang'],
+                        self.configdict['def_region'])
+        
+        self.rogersearchengine = googlesearch.GoogleSearch()
 
     #####################
     # The init and prep #
     #####################
     
     def readconfigfile(self, file):
+    
+        #TODO: add region 'US' input
         config = configparser.ConfigParser()
         
         if os.path.exists(file):
             config.read(file)
         else:
-            print('Config file not found!!')
-            exit()
+            raise IOError('Config file not found!! ('+file+')')
         
         if 'cinefiles' not in config:
-            print("You must have a [cinefiles] section in the config file!!!")
-            exit()
+            raise ValueError("You must have a [cinefiles] section in the config file!!!")
         
          # 'guess','skip','test','force','destroy','debugnum','searchfolder'
         conf = config['cinefiles']
@@ -134,6 +156,8 @@ class Cinefiles:
         self.configdict.update({'searchfolder':searchfolder})
         langselect = conf.get('default_language','en')
         self.configdict.update({'def_lang':langselect})
+        regselect = conf.get('default_country','US')
+        self.configdict.update({'def_region':regselect})
         
         localres_bool = conf.getboolean('localresources',fallback=True)
         self.configdict.update({'localresources':localres_bool})
@@ -141,10 +165,6 @@ class Cinefiles:
         hiddenresfolder = conf.get('resource_folder_name',
                                     self.structnames['hiddenresfolder'])
         self.structnames.update({'hiddenresfolder':hiddenresfolder})
-        
-#         hiddencompletelog = conf.get('complete_log_filename',
-#                                      self.structnames['hiddencompletelog'])
-#         self.structnames.update({'hiddencompletelog':hiddencompletelog})
         
         archive = conf.get('file_archive_filename',
                            self.structnames['archive'])
@@ -154,6 +174,9 @@ class Cinefiles:
         self.configdict.update({'logfilename':logfilename})
         logformat = config['cinefiles'].get('logformat','L{colon}T{colon}M')
         logformat = logformat.replace('L','%(levelname)s')
+        logformat = logformat.replace('F','%(filename)s')
+        logformat = logformat.replace('P','%(pathname)s')
+        logformat = logformat.replace('N','%(module)s')
         logformat = logformat.replace('T','%(asctime)s')
         logformat = logformat.replace('M','%(message)s')
         logformat = logformat.replace('{colon}',':')
@@ -168,11 +191,14 @@ class Cinefiles:
                             datefmt=self.configdict['logdateformat'],
                             level=self.configdict['debugnum'])
                             
-        overridestr = conf.get('override_title','')
-        overridelist = overridestr.split('+')
-        for title in overridelist:
-            title = title.strip()
-        self.configdict.update({'override-title-list':overridelist})
+#         overridestr = conf.get('override_title','')
+#         overridelist = overridestr.split('+')
+#         for title in overridelist:
+#             title = title.strip()
+#         self.configdict.update({'override-title-list':overridelist})
+        
+        win_hide_bool = conf.getboolean('windows_hide_structure',fallback=True)
+        self.configdict.update({'win_hide':win_hide_bool})
 
     def fixlogdateformat(self, format):
         format = format.replace('{a}','%a')
@@ -210,9 +236,13 @@ class Cinefiles:
         self.installresources = getmoduleresources()
         self.addedres = False
         self.recursiveupdate(self.installresources, newresources)
-
-        # if(self.addedres):
-#               logging.info("Added resources to "+resfolder)
+        
+        if(running_on_windows() and self.configdict['win_hide']):
+            FILE_ATTRIBUTE_HIDDEN = 0x02
+            hide = ctypes.windll.kernel32.SetFileAttributesW(newresources,
+                                                    FILE_ATTRIBUTE_HIDDEN)
+            if not hide: # There was an error.
+                raise ctypes.WinError()
             
     #this exists as to not replace the folder with copytree() but to add new resources
     #this allows already made indexes to use old files if they still need them
@@ -249,8 +279,8 @@ class Cinefiles:
             self.addedres = True
 #                       except FileNotFoundError as e:
 #                           logging.critical('Resource '+entry.path+' not found (')
-        except Exception as e:
-            logging.critical(str(e))
+        except IOError as e:
+            self.critical(e)
 
 
     #################################
@@ -258,8 +288,6 @@ class Cinefiles:
     #################################
 
     def run(self):
-        #init IMDb
-        self.imdb = IMDb()
         
         logging.info(strftime('Starting Cinefiles run at %d %b %Y %X'))
         logging.info("Search folder is: "+self.configdict['searchfolder'])
@@ -325,8 +353,6 @@ class Cinefiles:
             for subentry in subit:
                 if(subentry.name == self.structnames['archive']):
                     alreadyparsed = self.checkarchive(subentry)
-#                 if(subentry.name == self.structnames['hiddencompletelog']):
-#                     alreadyparsed = True
                 elif('.'+subentry.name.split('.')[-1] in self.allowedvideoextensions):
                     foundvideo = True
                 elif(subentry.name not in self.structnames.values()):
@@ -370,30 +396,32 @@ class Cinefiles:
     def process_movie(self,en,newname=''):
 #         self.runtotal+=1
         title = ''
+        year = None
         if(newname != ''):
             print("> ",end='',flush=True)
-            title = guessit(en.name)['title']
+            guessattr = guessit(en.name)
+            title = guessattr['title']
+            if('year' in guessattr):
+                year = guessattr['year']
         else:
             title = en.name
         
-        search = self.imdb.search_movie(title)
-        search.fetch()
+        searchresults = self.tmdb.search(title,year)
+        
         print('"'+title+'" ', end='', flush=True)
-        if(len(search.results)==0):
+        if(len(searchresults)==0):
             #couldn't find a match :(
-#               self.nomatch(en)
             if(newname!=''):
-                logging.info('Extended searching on '+file.name+'found'+
+                logging.info('Extended searching on '+title+'found'+
                              ' no matches!!')
                 return False
             self.nomatch(en)
-        elif(len(search.results)==1):
+        elif(len(searchresults)==1):
             #we got a direct match!
-            self.addmatch(en, search.results[0])
+            self.addmatch(en, searchresults[0])
             logging.info('Found '+en.name)
             print('Found!')
-#               self.match(en, search.results[0])
-        elif(len(search.results)>1):
+        elif(len(searchresults)>1):
             #uh oh, multiple found
             print("Multiple matches found", end='', flush=True)
             if(self.configdict['skip']):
@@ -401,9 +429,9 @@ class Cinefiles:
                 logging.info(file.name+" SKIPPED - too many results")
             elif(self.configdict['guess']):
                 print(" making best guess.")
-                self.addmatch(en, search.results[0])
+                self.addmatch(en, searchresults[0])
             else:
-                self.addchoice(en, search.results)
+                self.addchoice(en, searchresults)
                 print('')
         return True
 
@@ -478,7 +506,7 @@ class Cinefiles:
             self.selvar = tk.StringVar()
             label = tk.Label(self.popup, text=(
                     "More than one movie was found matching the "
-                    +"movie title in IMDb, please select the "
+                    +"movie title in TMDb, please select the "
                     +"correct one:"))
             label.pack()
         
@@ -504,13 +532,11 @@ class Cinefiles:
     
             first = True
             for movie in results:
-    #                   movie.fetch()
-    #                   radiotxt = movie.title+" ("+str(movie.year)+") "+movie.plot
                 radiotxt = movie.title+" ("+str(movie.year)+")"
                 radiobtn = tk.Radiobutton(  self.popup, 
                                             text=radiotxt, 
                                             variable=self.selvar, 
-                                            value=movie.imdb_id)
+                                            value=movie.id)
                 radiobtn.pack()
                 if(first):
                     first=False
@@ -538,7 +564,14 @@ class Cinefiles:
             self.popup.mainloop()
         
             #choosing/skipping is done by button call
+   
+   
+    ##################
+    # error handling #
+    ##################
         
+    def critical(self, err):
+        logging.critical(str(err)+'\n'+traceback.format_exc())
         
         
     #######################
@@ -551,13 +584,13 @@ class Cinefiles:
                 '<tr class="">'
                 +'<td><a class="rowlink" href="$%{foldername}/index.htm">'
                 +'<img class="thumbnail" src="$%{foldername}/$%{postersrc}"></a></td>'
-                +'<td>$%{title}</td>'
-                +'<td>$%{year}</td>'
-                +'<td>$%{runtime}</td>'
-                +'<td>$%{roger}</td>'
-                +'<td>$%{imdb}</td>'
-                +'<td>$%{rotten}</td>'
-                +'<td>$%{meta}</td>'
+                +'<td class="rowtitle">$%{title}</td>'
+                +'<td class="rowyear">$%{year}</td>'
+                +'<td class="rowruntime">$%{runtime}</td>'
+                +'<td class="rowroger">$%{roger}</td>'
+                +'<td class="rowimdb">$%{imdb}</td>'
+                +'<td class="rowrotten">$%{rotten}</td>'
+                +'<td class="rowmeta">$%{meta}</td>'
                 +'</a></tr>')
         
         tablerows = ''
@@ -584,7 +617,8 @@ class Cinefiles:
         
         replacedict = { 'headertitle':self.configdict['searchfolder'].split('/')[-1],
                         'cf_res':self.structnames['hiddenresfolder'],
-                        'table_rows':tablerows}
+                        'table_rows':tablerows,
+                        'tmdb_logo':'/images/tmdb-attribution-rectangle.png',}
         
         writeouthtml = html.substitute(replacedict)
         
@@ -622,7 +656,6 @@ class Cinefiles:
                             
     def purgerecursevily(self,entry):
         hiddenres = self.structnames['hiddenresfolder']
-        hiddencomplete = self.structnames['hiddencompletelog']
         archivename = self.structnames['archive']
         subit = os.scandir(entry.path)
         for subentry in subit:
@@ -631,24 +664,19 @@ class Cinefiles:
                 rmtree(subentry.path)
             elif(subentry.is_dir()):
                 self.purgerecursevily(subentry)
-            elif(subentry.name == hiddencomplete):
-                if(os.path.isfile(subentry.path)):
-                    print("Removing "+subentry.path)
-                    os.remove(subentry.path)
-                else:
-                    print(subentry.path+" already gone!")
             elif(subentry.name == archivename):
                 self.cleararchive(subentry.path)
     
     def cleararchive(self, archivepath):
         with open(archivepath,'r') as arch:
             for line in arch:
-                file = self.getarchfile(line)
-                if(os.path.isfile(file)):
-                    print("Removing "+file)
-                    os.remove(file)
-                else:
-                    print(file+" already gone!")
+                if(not line.startswith('#')):
+                    file = self.getarchfile(line)
+                    if(os.path.isfile(file)):
+                        print("Removing "+file)
+                        os.remove(file)
+                    else:
+                        print(file+" already gone!")
         
         print("Removing "+archivepath)
         os.remove(archivepath)
@@ -657,6 +685,7 @@ class Cinefiles:
         return line[13:-1]
         
     def getattrfrommetadata(self, path):
+        resname = self.structnames['hiddenresfolder']
         movieattributes = { 'indexfile':'',
                             'postersrc':'',
                             'title':'',
@@ -665,9 +694,8 @@ class Cinefiles:
                             'roger':'',
                             'imdb':'',
                             'rotten':'',
-                            'meta':''}
+                            'meta':'',}
                             
-        resname = self.structnames['hiddenresfolder']
         metadatapath = path+'/'+resname+'/metadata.txt'
         
         with open(metadatapath,'r') as mdata:
@@ -695,15 +723,4 @@ def getmoduleresources():
     res = resfull.split('/__init__.py')[0]
     res += '/resources'
     return res
-    
-def getphantomjs():
-    #TODO: check what OS we're on and use the correct phantomjs
-    resfull = os.path.abspath(sys.modules['cinefiles'].__file__)
-    res = resfull.split('/__init__.py')[0]
-    phantom = ''
-    if(system()=='Darwin'):
-        phantom = '/phantomjs-2.1.1-macosx/bin/phantomjs'
-    else:
-        raise Exception("I'm sorry, this OS is not supported by PhantomJS")
-    return res+phantom
     

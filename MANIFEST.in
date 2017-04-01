@@ -1,13 +1,5 @@
-include *.rst 
-include *.txt 
-include LICENSE 
-include .travis.yml 
-include *.md
-include *.py
-recursive-include cinefiles *.css
-recursive-include cinefiles *.html
-recursive-include cinefiles *.js
-recursive-include cinefiles *.png
-recursive-include examples *.ini
-recursive-include examples *.py
-recursive-include tests *.py
+graft src
+
+include LICENSE
+
+global-exclude *.py[co] __pycache__
