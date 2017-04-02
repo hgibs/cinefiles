@@ -224,7 +224,7 @@ class Title:
 
                 partlink = self.getytfirstlink(results)
 
-                if(partlink == ''):
+                if(partlink == '' or partlink is None):
                     logging.error(  "Couldn't find suitable youtube"
                                     + "trailer")
                 else:
