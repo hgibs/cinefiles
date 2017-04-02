@@ -521,6 +521,7 @@ class Cinefiles:
         self.popup.destroy()
 #           print(dir(self.selvar))
         print("matched movie id "+self.selvar.get())
+        self.choiceselect = self.selvar.get()
         self.tkcleanup()
         
     def tkskip(self):
@@ -603,8 +604,10 @@ class Cinefiles:
                             pady=1)
                             
             self.popup.pack_propagate(1)
+            self.choiceselect = None
             self.popup.mainloop()
-        
+            if(self.choiceselect is not None):
+                self.addmatch(file, tmdb.getmovie(self.choiceselect))
             #choosing/skipping is done by button call
    
    
