@@ -40,6 +40,12 @@ To rename folders automatically: (this can’t be undone automatically yet)
     directory = "/Volumes/HDD/jumble_of_movies"
     organize = cf.Cinefolders(searchfolder=directory)
     organize.organizefolder()
+    
+Notes
+-----
+
+- If you change the name of any of your folders you'll have to run the run() function again to fix the links in the master index.htm
+- Any movies that aren't found are written into a 'cinefiles-misses.txt' file in the search folder. Add a correctly made link.xml to that movie folder (see examples folder), or rename that movie's folder to a better (more searchable) name.
 
 What does cinefiles actually do:
 --------------------------------
