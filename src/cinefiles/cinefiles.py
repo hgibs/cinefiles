@@ -162,6 +162,10 @@ class Cinefiles:
         regselect = conf.get('default_country','US')
         self.configdict.update({'def_region':regselect})
         
+        force_specific = conf.get('force-specific','')
+        force_index = (force_specific.lower().find('index') >= 0)
+        self.configdict.update({'force_index':force_index})
+        
         localres_bool = conf.getboolean('localresources',fallback=True)
         self.configdict.update({'localresources':localres_bool})
         
@@ -367,11 +371,15 @@ class Cinefiles:
                         logging.debug('Recursively searching '+subentry.name)
                         self.printoncerecursevely(entry)
                         subfolder = self.recursefolder(subentry)
-                    
+                  
+            force_extra = False
+            if('force_index' in self.configdict):
+                   force_extra = self.configdict['force_index']
+                   
             if(foundvideo):
                 if(alreadyparsed): 
                     logging.info(entry.name+'\talready processed')
-                    if(self.configdict['force']):
+                    if(self.configdict['force'] or force_extra):
                         logging.info('Processing movie, [force] is set to True')
                         self.process_movie(entry)
                     else:
@@ -428,7 +436,7 @@ class Cinefiles:
         if(len(searchresults)==0):
             #couldn't find a match :(
             if(newname!=''):
-                logging.info('Extended searching on '+title+'found'+
+                logging.info('Extended searching on '+title+' found'+
                              ' no matches!!')
                 return False
             self.nomatch(en)
