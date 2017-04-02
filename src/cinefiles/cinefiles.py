@@ -120,6 +120,8 @@ class Cinefiles:
                         self.configdict['def_region'])
         
         self.rogersearchengine = googlesearch.GoogleSearch()
+        
+        self.misses = []
 
     #####################
     # The init and prep #
@@ -313,6 +315,10 @@ class Cinefiles:
         print("🔥    Done! Scanned "+str(self.runtotal)+" entries.")
         logging.info(strftime('Complete at %d %b %Y %X'))
         logging.info("Scanned "+str(self.runtotal)+" entries.")
+        misstotal = len(self.misses)
+        if(misstotal > 0):
+            self.recordmisses()
+        logging.info(str(misstotal)+" did not result in a match")
         logging.info('-'*60)
         
     def printoncerecursevely(self,en):
@@ -450,11 +456,21 @@ class Cinefiles:
         linkfile = folder.path+'/link.xml'
         if(os.path.exists(linkfile)):
             doc = etree.parse(linkfile)
-            root = olddoc.getroot()
+            root = doc.getroot()
             for child in root:
-                if(child.tag == idkey):
+                if(child.tag == 'tmdbid'):
                     return child.text
         return None
+        
+    def recordmisses(self):
+        misspath = self.configdict['searchfolder']+'/cinefiles-misses.txt'
+        with open(misspath, w) as missfile:
+            missfile.write( 'The following movies resulted in no matches! '
+                    'Try renaming the folders, or adding a link.xml file: \n'
+                    '<dict><tmdbid>999</tmdbid></dict>\nwhere 999 is the number '
+                    'of the movie in The Movie Database.\n')
+            for name in self.misses:
+                missfile.write(name+'\n')
 
     ##########################
     # The No-Matches portion #
@@ -468,6 +484,10 @@ class Cinefiles:
             #the movie still wasn't found so we stop the loop
             logging.error("NO MATCHES for "+file.name)
             print("\tNo match!!")
+    
+    def addmiss(self, file):
+        spath = file.path
+        self.misses.append(spath.split(self.configdict['searchfolder'])[-1])
         
         
         
@@ -481,11 +501,11 @@ class Cinefiles:
             #it's easier to copy resources now
             self.prepfolder(folder.path)
         m = title.Title(folder.path, movie, self, self.configdict)
-        self.addlink(folder,movie)
         self.indexlist.append(m.getattributes())
         
     def addmatch(self, fol, mov):
 #           print('\tFound!')
+        self.addlink(fol,mov)
         self.matches.append((fol,mov))
 
     def addlink(self, folder, movie):
@@ -507,7 +527,7 @@ class Cinefiles:
             tmdbid = etree.SubElement(root,idkey)
             tmdbid.text = movie.id
         doc = etree.ElementTree(root)
-        with open('link.xml', 'wb') as outfile:
+        with open(linkfile, 'wb') as outfile:
             doc.write(outfile)
         
 
