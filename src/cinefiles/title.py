@@ -748,7 +748,7 @@ class Title:
             self.getreviews()
             self.writeout()
         else:
-            logging.info("Not writing index.html, already exists")
+            logging.info("Not writing index.htm, already exists and no updates")
             self.indexfile = self.archivelist[self.archivetypes['index']]
           #log.append(MovieLog(file.name, "IMDb download error -   "+r.status_code))
         print("done")

@@ -16,6 +16,7 @@ from guessit import guessit
 from io import open as iopen
 from platform import system
 import traceback
+from lxml import etree
 
 ### Could thread this because it is a SO SLOOWWW
 
@@ -408,8 +409,14 @@ class Cinefiles:
                 year = guessattr['year']
         else:
             title = en.name
+           
+        searchresults = []
         
-        searchresults = self.tmdb.search(title,year)
+        trylink = self.readlink(en)
+        if(trylink is not None):
+            searchresults = [self.tmdb.getmovie(trylink)]
+        else:
+            searchresults = self.tmdb.search(title,year)
         
         print('"'+title+'" ', end='', flush=True)
         if(len(searchresults)==0):
@@ -437,7 +444,17 @@ class Cinefiles:
                 self.addchoice(en, searchresults)
                 print('')
         return True
-
+        
+        
+    def readlink(self, folder):
+        linkfile = folder.path+'/link.xml'
+        if(os.path.exists(linkfile)):
+            doc = etree.parse(linkfile)
+            root = olddoc.getroot()
+            for child in root:
+                if(child.tag == idkey):
+                    return child.text
+        return None
 
     ##########################
     # The No-Matches portion #
@@ -464,13 +481,35 @@ class Cinefiles:
             #it's easier to copy resources now
             self.prepfolder(folder.path)
         m = title.Title(folder.path, movie, self, self.configdict)
+        self.addlink(folder,movie)
         self.indexlist.append(m.getattributes())
         
     def addmatch(self, fol, mov):
 #           print('\tFound!')
         self.matches.append((fol,mov))
 
-
+    def addlink(self, folder, movie):
+        idkey = 'tmdbid'
+        linkfile = folder.path+'/link.xml'
+        root = etree.Element('dict')
+        addedtmdbid = False
+        if(os.path.exists(linkfile)):
+            olddoc = etree.parse(linkfile)
+            root = olddoc.getroot()
+            for child in root:
+                if(child.tag == idkey):
+                    child.text = movie.id
+                    addedtmdbid = True
+            if(not addedtmdbid):
+                tmdbid = etree.SubElement(root,idkey)
+                tmdbid.text = movie.id
+        else:
+            tmdbid = etree.SubElement(root,idkey)
+            tmdbid.text = movie.id
+        doc = etree.ElementTree(root)
+        with open('link.xml', 'wb') as outfile:
+            doc.write(outfile)
+        
 
     ############################
     # The Many-Matches portion #
