@@ -65,12 +65,15 @@ class Movie:
     
         self.runtime = self.attributes['runtime']
         self.status = self.attributes['status']
-        self.backdrop_path = self.img_base_path()+self.attributes['backdrop_path']
         self.overview = self.attributes['overview']
         self.title = self.attributes['title']
         self.tagline = self.attributes['tagline']
         self.belongs_to_collection = self.attributes['belongs_to_collection']
         self.backdrops = self.attributes['images']['backdrops']
+        if(len(self.backdrops)>0):
+            self.backdrop_path = self.img_base_path()+self.attributes['backdrop_path']
+        else:
+            self.backdrop_path = ''
         self.posters = self.attributes['images']['posters']
         self.original_title = self.attributes['original_title']
         self.original_language = self.attributes['original_language']
@@ -90,6 +93,11 @@ class Movie:
         self.spoken_languages = self.attributes['spoken_languages']
         self.vote_average = self.attributes['vote_average']
         self.id = str(self.attributes['id'])
+        
+        if(len(self.release_date)>=4):
+            self.ftitle = ( self.title+" ("
+                            +self.release_date[0:4]+")")
+            self.year = int(self.release_date[0:4])
         
         self.alternative_titles = self.attributes['alternative_titles']['titles']
         
