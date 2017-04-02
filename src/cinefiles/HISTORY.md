@@ -7,6 +7,8 @@ don't re-find each match, and so you can specify the correct link
 capitalizing coordinating conjunctions unless they start or end the title
 - fixed issue where index.htm may not be updated even if new information is downloaded
 on a new run.
+- added force_specific feature to config file
+- fixed an issue with how movies are generated if the ID is known
 
 ###v1.0.0
 - Released 1.0
