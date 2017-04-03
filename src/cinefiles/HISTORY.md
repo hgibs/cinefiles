@@ -9,6 +9,7 @@ capitalizing coordinating conjunctions unless they start or end the title
 on a new run.
 - added force_specific feature to config file
 - fixed an issue with how movies are generated if the ID is known
+- lots of small bug fixes
 
 ###v1.0.0
 - Released 1.0
