@@ -367,10 +367,13 @@ class Title:
 
                 #get rating
                 metarating = rogertree.xpath('//meta[@itemprop="ratingValue"]')[0]
-                roger_float = float(metarating.values()[0])
-                self.rogerratingvalue = str(int(roger_float)) #get the first digit
-                self.rogerratingvalue += '_'+str(int(roger_float*10)-int(roger_float)*10) #add the tenths-place digit
-                ## 3.5 => 3_5
+                if(len(metarating.values()) > 0):
+                    roger_float = float(metarating.values()[0])
+                    self.rogerratingvalue = str(int(roger_float)) #get the first digit
+                    self.rogerratingvalue += '_'+str(int(roger_float*10)-int(roger_float)*10) #add the tenths-place digit
+                    ## 3.5 => 3_5
+                else:
+                    self.rogerratingvalue = '0_0'
 
                 # metascale = rogertree.xpath('//meta[@itemprop="bestRating"]')[0]
                 #         self.rogerratingscale = metascale.values()[0]
@@ -417,32 +420,34 @@ class Title:
         self.rottenhtml = ''
         self.rottenhref = self.omdbdata['tomatoURL']
         self.rottenrating = 'None'
-        
-        rottenreq = requests.get(self.rottenhref)
-        print(".", end='', flush=True)
-        logging.debug('Fetched '+rottenreq.url)
+        if(self.rottenhref.lower().find('http') >= 0):
+            rottenreq = requests.get(self.rottenhref)
+            print(".", end='', flush=True)
+            logging.debug('Fetched '+rottenreq.url)
 
-        if(rottenreq.ok):
-            tree = html.fromstring(rottenreq.content)
-            percentage = tree.xpath('//a[@id="tomato_meter_link"]/span')
-            scorestats = tree.xpath('//div[@id="scoreStats"]/div[@class="superPageFontColor"]')
-            if(len(percentage) > 0 and len(scorestats) >= 2):
-                self.rottenhtml += percentage[1].text_content()
-                self.rottenrating = percentage[1].text_content()
-                fresh = scorestats[2].text_content().replace('\n','').replace('\t','').strip()
-                fresh = fresh[fresh.find(':')+1:].strip()
-                self.rottenhtml += ' ('+fresh+'/'
+            if(rottenreq.ok):
+                tree = html.fromstring(rottenreq.content)
+                percentage = tree.xpath('//a[@id="tomato_meter_link"]/span')
+                scorestats = tree.xpath('//div[@id="scoreStats"]/div[@class="superPageFontColor"]')
+                if(len(percentage) > 0 and len(scorestats) >= 2):
+                    self.rottenhtml += percentage[1].text_content()
+                    self.rottenrating = percentage[1].text_content()
+                    fresh = scorestats[2].text_content().replace('\n','').replace('\t','').strip()
+                    fresh = fresh[fresh.find(':')+1:].strip()
+                    self.rottenhtml += ' ('+fresh+'/'
 
-                numscored = scorestats[1].text_content().replace('\n','').replace('\t','').strip()
-                numstr = numscored[numscored.find(':')+1:].strip()
-                self.rottenhtml += numscored[numscored.find(':')+2:]+')'
+                    numscored = scorestats[1].text_content().replace('\n','').replace('\t','').strip()
+                    numstr = numscored[numscored.find(':')+1:].strip()
+                    self.rottenhtml += numscored[numscored.find(':')+2:]+')'
+                else:
+                    self.rottenhtml = "The 'tomatometer' couldn't be found."
+                    logging.error('There was a problem with the tomato meter. % ='
+                                    +str(percentage)+'\nscorestats = '+str(scorestats)
+                                    +'\n@'+rottenreq.url)
             else:
-                self.rottenhtml = "The 'tomatometer' couldn't be found."
-                logging.error('There was a problem with the tomato meter. % ='
-                                +str(percentage)+'\nscorestats = '+str(scorestats)
-                                +'\n@'+rottenreq.url)
+                self.rottenhtml = "The 'tomatometer' had a problem during parsing."
         else:
-            self.rottenhtml = "The 'tomatometer' had a problem during parsing."
+            self.rottenhtml = "No rotten tomatoes exists for this movie."
 
     # Get the metacritic off OMDb
     def metacritic(self):
