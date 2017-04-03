@@ -16,6 +16,7 @@ from guessit import guessit
 from io import open as iopen
 from platform import system
 import traceback
+from lxml import etree
 
 ### Could thread this because it is a SO SLOOWWW
 
@@ -119,6 +120,8 @@ class Cinefiles:
                         self.configdict['def_region'])
         
         self.rogersearchengine = googlesearch.GoogleSearch()
+        
+        self.misses = []
 
     #####################
     # The init and prep #
@@ -158,6 +161,10 @@ class Cinefiles:
         self.configdict.update({'def_lang':langselect})
         regselect = conf.get('default_country','US')
         self.configdict.update({'def_region':regselect})
+        
+        force_specific = conf.get('force-specific','')
+        force_index = (force_specific.lower().find('index') >= 0)
+        self.configdict.update({'force_index':force_index})
         
         localres_bool = conf.getboolean('localresources',fallback=True)
         self.configdict.update({'localresources':localres_bool})
@@ -312,6 +319,10 @@ class Cinefiles:
         print("🔥    Done! Scanned "+str(self.runtotal)+" entries.")
         logging.info(strftime('Complete at %d %b %Y %X'))
         logging.info("Scanned "+str(self.runtotal)+" entries.")
+        misstotal = len(self.misses)
+        if(misstotal > 0):
+            self.recordmisses()
+        logging.info(str(misstotal)+" did not result in a match")
         logging.info('-'*60)
         
     def printoncerecursevely(self,en):
@@ -360,11 +371,15 @@ class Cinefiles:
                         logging.debug('Recursively searching '+subentry.name)
                         self.printoncerecursevely(entry)
                         subfolder = self.recursefolder(subentry)
-                    
+                  
+            force_extra = False
+            if('force_index' in self.configdict):
+                   force_extra = self.configdict['force_index']
+                   
             if(foundvideo):
                 if(alreadyparsed): 
                     logging.info(entry.name+'\talready processed')
-                    if(self.configdict['force']):
+                    if(self.configdict['force'] or force_extra):
                         logging.info('Processing movie, [force] is set to True')
                         self.process_movie(entry)
                     else:
@@ -408,14 +423,20 @@ class Cinefiles:
                 year = guessattr['year']
         else:
             title = en.name
+           
+        searchresults = []
         
-        searchresults = self.tmdb.search(title,year)
+        trylink = self.readlink(en)
+        if(trylink is not None):
+            searchresults = [self.tmdb.getmovie(trylink)]
+        else:
+            searchresults = self.tmdb.search(title,year)
         
         print('"'+title+'" ', end='', flush=True)
         if(len(searchresults)==0):
             #couldn't find a match :(
             if(newname!=''):
-                logging.info('Extended searching on '+title+'found'+
+                logging.info('Extended searching on '+title+' found'+
                              ' no matches!!')
                 return False
             self.nomatch(en)
@@ -437,7 +458,27 @@ class Cinefiles:
                 self.addchoice(en, searchresults)
                 print('')
         return True
-
+        
+        
+    def readlink(self, folder):
+        linkfile = folder.path+'/link.xml'
+        if(os.path.exists(linkfile)):
+            doc = etree.parse(linkfile)
+            root = doc.getroot()
+            for child in root:
+                if(child.tag == 'tmdbid'):
+                    return child.text
+        return None
+        
+    def recordmisses(self):
+        misspath = self.configdict['searchfolder']+'/cinefiles-misses.txt'
+        with open(misspath, w) as missfile:
+            missfile.write( 'The following movies resulted in no matches! '
+                    'Try renaming the folders, or adding a link.xml file: \n'
+                    '<dict><tmdbid>999</tmdbid></dict>\nwhere 999 is the number '
+                    'of the movie in The Movie Database.\n')
+            for name in self.misses:
+                missfile.write(name+'\n')
 
     ##########################
     # The No-Matches portion #
@@ -451,6 +492,10 @@ class Cinefiles:
             #the movie still wasn't found so we stop the loop
             logging.error("NO MATCHES for "+file.name)
             print("\tNo match!!")
+    
+    def addmiss(self, file):
+        spath = file.path
+        self.misses.append(spath.split(self.configdict['searchfolder'])[-1])
         
         
         
@@ -468,9 +513,31 @@ class Cinefiles:
         
     def addmatch(self, fol, mov):
 #           print('\tFound!')
+        self.addlink(fol,mov)
         self.matches.append((fol,mov))
 
-
+    def addlink(self, folder, movie):
+        idkey = 'tmdbid'
+        linkfile = folder.path+'/link.xml'
+        root = etree.Element('dict')
+        addedtmdbid = False
+        if(os.path.exists(linkfile)):
+            olddoc = etree.parse(linkfile)
+            root = olddoc.getroot()
+            for child in root:
+                if(child.tag == idkey):
+                    child.text = movie.id
+                    addedtmdbid = True
+            if(not addedtmdbid):
+                tmdbid = etree.SubElement(root,idkey)
+                tmdbid.text = movie.id
+        else:
+            tmdbid = etree.SubElement(root,idkey)
+            tmdbid.text = movie.id
+        doc = etree.ElementTree(root)
+        with open(linkfile, 'wb') as outfile:
+            doc.write(outfile)
+        
 
     ############################
     # The Many-Matches portion #
@@ -482,6 +549,7 @@ class Cinefiles:
         self.popup.destroy()
 #           print(dir(self.selvar))
         print("matched movie id "+self.selvar.get())
+        self.choiceselect = self.selvar.get()
         self.tkcleanup()
         
     def tkskip(self):
@@ -564,8 +632,10 @@ class Cinefiles:
                             pady=1)
                             
             self.popup.pack_propagate(1)
+            self.choiceselect = None
             self.popup.mainloop()
-        
+            if(self.choiceselect is not None):
+                self.addmatch(file, tmdb.getmovie(self.choiceselect))
             #choosing/skipping is done by button call
    
    

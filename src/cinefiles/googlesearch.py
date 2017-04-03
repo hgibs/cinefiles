@@ -33,7 +33,8 @@ class GoogleSearch:
         link = ''
         try:
             link = self.use_roger_API(query)
-        except:
+        except Exception as err:
+            logging.error(str(err))
             link = ''
         
         if(link!=''):
@@ -61,26 +62,27 @@ class GoogleSearch:
 
     def use_roger_API(self, query):
         baseurl = 'https://www.googleapis.com/customsearch/v1element?'
-        query = parse.urlencode({   'key':'AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY',
-                                    'rsz':'filtered_cse',
-                                    'num':'10',
-                                    'hl':'en',
-                                    'prettyPrint':'false',
-                                    'source':'gcsc',
-                                    'gss':'.com',
-                                    'sig':'581c068e7ad56cae00e4e2e8f7dc3837',
-                                    'cx':'004943367334924041372:turuh-9ckxm',
-                                    'googlehost':'www.google.com',
-                                    'gs_l':'partner.12...218683.226149.0.235267.12.10.0.0.0.0.2971.12428.4-2j3j2j9-3.10.0.gsnos%2Cn%3D13...0.7497j30721759j12j1..1ac.1.25.partner..11.1.431.izeCjn_DLtQ',
-                                    'q':query,})
-        fullurl = baseurl+query
+        querydict = parse.urlencode({   'key':'AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY',
+                                        'rsz':'filtered_cse',
+                                        'num':'10',
+                                        'hl':'en',
+                                        'prettyPrint':'false',
+                                        'source':'gcsc',
+                                        'gss':'.com',
+                                        'sig':'581c068e7ad56cae00e4e2e8f7dc3837',
+                                        'cx':'004943367334924041372:turuh-9ckxm',
+                                        'googlehost':'www.google.com',
+                                        'gs_l':'partner.12...218683.226149.0.235267.12.10.0.0.0.0.2971.12428.4-2j3j2j9-3.10.0.gsnos%2Cn%3D13...0.7497j30721759j12j1..1ac.1.25.partner..11.1.431.izeCjn_DLtQ',
+                                        'q':query,})
+        fullurl = baseurl+querydict
         req = requests.get(fullurl)
         print('.',end='',flush=True)
         data = json.loads(req.text)
         self.debugroger = data
         if('results' in data):
-            if(len(data['results']) > 0):
-                firstresult = data['results'][0]
+            results = data['results']
+            if(len(results) > 0):
+                firstresult = results[0]
                 if('unescapedUrl' in firstresult):
                     return firstresult['unescapedUrl']
                 

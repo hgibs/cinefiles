@@ -83,12 +83,36 @@ class Cinefolders:
         
     def fixname(self, en):
         i_info = guessit(en.name)
-        newName = i_info['title'].lower()
-                
-        if(newName[0:4] == 'the '):
-            newName.replace('the ','')
-            newName = newName + ', The '
-        newName = newName.title()
+#         newName = i_info['title'].lower()
+        name = i_info['title']
+        words = name.split(' ')
+        newName = ''
+        skips = ['a','an','the','and','but','or','for','nor','on','at',
+                'to','from','by']
+        punctuation = [',','?','!','.',';',':']
+        for w in words:
+            addpunctuation = ''
+            if(w[-1] in punctuation):
+                addpunctuation = w[-1]
+                w=w[:-1]
+            if(w.lower() not in skips):
+                newName += w2.title()+' '+addpunctuation
+        
+        #make sure first and last word is capitalized
+        words2 = newName.split(' ')
+        words2[0] = words2[0].title()
+        words2[-1] = words2[-1].title()
+        newName = ''
+        for w in words2:
+            newName += w+' '
+            
+        newName = newName.strip()
+        
+        if(newName[0:4].lower() == 'the '):
+            newName = newName[4:]
+            newName += ', The '
+#         newName = newName.title()
+        
 
         if('year' in i_info):
             year = str(i_info['year'])
@@ -116,17 +140,17 @@ class Cinefolders:
         
         same_folder = (src==dirpath)
     
-        if(not copy and not same_folder):
-            confirmtxt = ""
-            while(not (confirmtxt=="yes" or confirmtxt=="no")):
-                confirmtxt = input( 
-                    "I highly reccomend you copy movies first, if you "
-                    +"don't want an error to delete or corrupt your "
-                    +"movies. Are you sure you want to proceed with "
-                    +"moving movies into folders? (yes or no) ")
-                confirmtxt = confirmtxt.lower()
-                if(not (confirmtxt=="yes" or confirmtxt=="no")):
-                    print("Please enter 'yes' or 'no'")
+#         if(not copy and not same_folder):
+#             confirmtxt = ""
+#             while(not (confirmtxt=="yes" or confirmtxt=="no")):
+#                 confirmtxt = input( 
+#                     "I highly reccomend you copy movies first, if you "
+#                     +"don't want an error to delete or corrupt your "
+#                     +"movies. Are you sure you want to proceed with "
+#                     +"moving movies into folders? (yes or no) ")
+#                 confirmtxt = confirmtxt.lower()
+#                 if(not (confirmtxt=="yes" or confirmtxt=="no")):
+#                     print("Please enter 'yes' or 'no'")
     
         for item in list:
             if(item.is_file() and num<=limit):
@@ -135,7 +159,8 @@ class Cinefolders:
             
                     print('Copying to '+newName)
                     logging.info(newName)
-                    makedirs(dirpath+'/'+newName)
+                    if(not os.path.exists(dirpath+'/'+newName)):
+                        makedirs(dirpath+'/'+newName)
                     if(copy):
                         copy2(item.path, dirpath+'/'+newName+'/'+item.name)
                     else:

@@ -68,7 +68,9 @@ class TMDb:
             
         return results
         
-#     def getbyid(self, id):
+    def getmovie(self, id):
+        idnum = int(id)
+        return movie.Movie({'id':idnum},self)
         
         
     def safeapi(self, url, callnum=0):

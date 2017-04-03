@@ -110,7 +110,8 @@ class Title:
         self.title = self.movie.title
         
         self.updated = False
-        
+        if('force_index' in self.configs):
+            self.updated = self.configs['force_index']
         
     def prephtml(self):
         self.rogerratingvalue = '0_0'
@@ -223,7 +224,7 @@ class Title:
 
                 partlink = self.getytfirstlink(results)
 
-                if(partlink == ''):
+                if(partlink == '' or partlink is None):
                     logging.error(  "Couldn't find suitable youtube"
                                     + "trailer")
                 else:
@@ -333,7 +334,7 @@ class Title:
             logging.warn(str(e))
             self.trailerfile=''
 
-        self.updated = self.trailersuccess
+        self.updated = self.updated or self.trailersuccess
 
 
     ###################
@@ -349,7 +350,12 @@ class Title:
 
     #Roger ebert info scrape
     def getrogerebertinfo(self):
-        self.rogereberthref = self.higher.rogersearchengine.get_link(self.movie.ftitle)
+        qtitle = ''
+        if(self.movie.ftitle == ''):
+            qtitle = self.movie.title
+        else:
+            qtitle = self.movie.ftitle
+        self.rogereberthref = self.higher.rogersearchengine.get_link(qtitle)
         if(self.rogereberthref.find("www.rogerebert.com/reviews")>=0):
             ##scrape his review page
             rogerreq = requests.get(self.rogereberthref.replace(' ',''))
@@ -361,10 +367,13 @@ class Title:
 
                 #get rating
                 metarating = rogertree.xpath('//meta[@itemprop="ratingValue"]')[0]
-                roger_float = float(metarating.values()[0])
-                self.rogerratingvalue = str(int(roger_float)) #get the first digit
-                self.rogerratingvalue += '_'+str(int(roger_float*10)-int(roger_float)*10) #add the tenths-place digit
-                ## 3.5 => 3_5
+                if(len(metarating.values()) > 0):
+                    roger_float = float(metarating.values()[0])
+                    self.rogerratingvalue = str(int(roger_float)) #get the first digit
+                    self.rogerratingvalue += '_'+str(int(roger_float*10)-int(roger_float)*10) #add the tenths-place digit
+                    ## 3.5 => 3_5
+                else:
+                    self.rogerratingvalue = '0_0'
 
                 # metascale = rogertree.xpath('//meta[@itemprop="bestRating"]')[0]
                 #         self.rogerratingscale = metascale.values()[0]
@@ -399,7 +408,8 @@ class Title:
                 self.review_rest = ''
         else:
             ##either didn't find it or returned non-review link
-            logging.info("No roger ebert review found")
+            logging.info("No roger ebert review found for "
+                        +self.movie.ftitle+" ("+self.rogereberthref+")")
             self.rogereberthref = ''
             self.review_first = ''
             self.review_rest = ''
@@ -410,27 +420,34 @@ class Title:
         self.rottenhtml = ''
         self.rottenhref = self.omdbdata['tomatoURL']
         self.rottenrating = 'None'
-        
-        rottenreq = requests.get(self.rottenhref)
-        print(".", end='', flush=True)
-        logging.debug('Fetched '+rottenreq.url)
+        if(self.rottenhref.lower().find('http') >= 0):
+            rottenreq = requests.get(self.rottenhref)
+            print(".", end='', flush=True)
+            logging.debug('Fetched '+rottenreq.url)
 
-        if(rottenreq.ok):
-            tree = html.fromstring(rottenreq.content)
-            percentage = tree.xpath('//a[@id="tomato_meter_link"]/span')
-            self.rottenhtml += percentage[1].text_content()
-            self.rottenrating = percentage[1].text_content()
-            scorestats = tree.xpath('//div[@id="scoreStats"]/div[@class="superPageFontColor"]')
+            if(rottenreq.ok):
+                tree = html.fromstring(rottenreq.content)
+                percentage = tree.xpath('//a[@id="tomato_meter_link"]/span')
+                scorestats = tree.xpath('//div[@id="scoreStats"]/div[@class="superPageFontColor"]')
+                if(len(percentage) > 0 and len(scorestats) >= 2):
+                    self.rottenhtml += percentage[1].text_content()
+                    self.rottenrating = percentage[1].text_content()
+                    fresh = scorestats[2].text_content().replace('\n','').replace('\t','').strip()
+                    fresh = fresh[fresh.find(':')+1:].strip()
+                    self.rottenhtml += ' ('+fresh+'/'
 
-            fresh = scorestats[2].text_content().replace('\n','').replace('\t','').strip()
-            fresh = fresh[fresh.find(':')+1:].strip()
-            self.rottenhtml += ' ('+fresh+'/'
-
-            numscored = scorestats[1].text_content().replace('\n','').replace('\t','').strip()
-            numstr = numscored[numscored.find(':')+1:].strip()
-            self.rottenhtml += numscored[numscored.find(':')+2:]+')'
+                    numscored = scorestats[1].text_content().replace('\n','').replace('\t','').strip()
+                    numstr = numscored[numscored.find(':')+1:].strip()
+                    self.rottenhtml += numscored[numscored.find(':')+2:]+')'
+                else:
+                    self.rottenhtml = "The 'tomatometer' couldn't be found."
+                    logging.error('There was a problem with the tomato meter. % ='
+                                    +str(percentage)+'\nscorestats = '+str(scorestats)
+                                    +'\n@'+rottenreq.url)
+            else:
+                self.rottenhtml = "The 'tomatometer' had a problem during parsing."
         else:
-            self.rottenhtml = "The 'tomatometer' couldn't be found."
+            self.rottenhtml = "No rotten tomatoes exists for this movie."
 
     # Get the metacritic off OMDb
     def metacritic(self):
@@ -495,9 +512,9 @@ class Title:
     ########################
 
     def writeout(self):
-        if (self.archivetypes['index'] not in self.archivelist
-                and not self.configs['force']):
-            logging.debug('Processing variables for index.html')
+        if (self.archivetypes['index'] not in self.archivelist or
+                self.configs['force'] or self.updated):
+            logging.debug('Processing variables for index.htm')
             with open(self.res_path+'index.html','r') as templatefile:
                 templatehtml = templatex.TemplateX(templatefile.read().replace('\n', '').replace('\t', ''))
 
@@ -674,7 +691,7 @@ class Title:
             self.indexfile = htmlfilename
         else:
             ##File already written
-            logging.info('Skipping making the index.html')
+            logging.info('Skipping making the index.htm')
             #self.addfiletolog(self.archivetypes['index'],self.archivelist[self.archivetypes['index']])
             self.indexfile = self.archivelist[self.archivetypes['index']]
 
@@ -748,7 +765,7 @@ class Title:
             self.getreviews()
             self.writeout()
         else:
-            logging.info("Not writing index.html, already exists")
+            logging.info("Not writing index.htm, already exists and no updates")
             self.indexfile = self.archivelist[self.archivetypes['index']]
           #log.append(MovieLog(file.name, "IMDb download error -   "+r.status_code))
         print("done")
