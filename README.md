@@ -15,8 +15,9 @@ Organizes, indexes, and pulls relevant info for your movie library presented in 
 
 Requirements
 ------------
-Python 3
-*nix operating system (Mac OS, Linux, etc) (This will be cross-platform by v2.0)
+
+- Python 3.5+
+- *nix operating system (Mac OS, Linux, etc) (This will be cross-platform by v2.0)
 
 
 Installation
