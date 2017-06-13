@@ -4,7 +4,7 @@ import logging
 import shutil
 from shutil import copy2, move
 from os import path, scandir, makedirs
-# import os
+import os
 from sys import maxsize
 from guessit import guessit
 import configparser
@@ -96,7 +96,7 @@ class Cinefolders:
                 addpunctuation = w[-1]
                 w=w[:-1]
             if(w.lower() not in skips):
-                newName += w2.title()+' '+addpunctuation
+                newName += w.title()+' '+addpunctuation
         
         #make sure first and last word is capitalized
         words2 = newName.split(' ')

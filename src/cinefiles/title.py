@@ -187,6 +187,7 @@ class Title:
 
     def omdbsearch(self):
         self.omdbdata = {}
+        self.omdbdata.update({'imdbRating':'','tomatoURL':''})
         try:
             baseurl = 'http://www.omdbapi.com/?'
             query = parse.urlencode({   'i':self.movie.imdb_id,
@@ -195,7 +196,7 @@ class Title:
             req = requests.get(fullurl)
             print('.',end='',flush=True)
             data = json.loads(req.text)
-            self.omdbdata = data
+            self.omdbdata.update(data)
         except Exception as err:
             logging.error("Error fetching OMDb info: "+str(err))
 
@@ -366,7 +367,9 @@ class Title:
                 rogertree = html.fromstring(rogerreq.content)
 
                 #get rating
-                metarating = rogertree.xpath('//meta[@itemprop="ratingValue"]')[0]
+                metarating = []
+                if(len(rogertree.xpath('//meta[@itemprop="ratingValue"]')) > 0):
+                    metarating = rogertree.xpath('//meta[@itemprop="ratingValue"]')[0]
                 if(len(metarating.values()) > 0):
                     roger_float = float(metarating.values()[0])
                     self.rogerratingvalue = str(int(roger_float)) #get the first digit

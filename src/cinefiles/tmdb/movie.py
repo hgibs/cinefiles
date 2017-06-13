@@ -53,12 +53,21 @@ class Movie:
             fullurl = baseurl+query
             self.debugquery=fullurl
             req = requests.get(fullurl)
-            data = json.loads(req.text)
-            self.processjson(data)
-            self.fetched = True
+            try:
+                data = json.loads(req.text)
+                self.processjson(data)
+                self.fetched = True
+            except json.JSONDecodeError as err:
+                logging.critical(err)
+                #return bogus info
+                self.processjson(self.attributes)
+                self.fetched = False
         
     def img_base_path(self):
-        return self.tmdb.imgbase+self.tmdb.imgsize
+        retstr = self.tmdb.imgbase+self.tmdb.imgsize
+        if(retstr is None or retstr == ''):
+            return ''
+        return retstr
         
     def processjson(self,resultsdict):
         self.attributes.update(resultsdict)
