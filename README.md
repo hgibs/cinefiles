@@ -13,6 +13,11 @@ cinefiles
 
 Organizes, indexes, and pulls relevant info for your movie library presented in a clean, locally-resourced, set of webpages.
 
+NOTE:
+------
+
+I am reviving this project after a year off, its not currently working but I expect it to be working in the next few months (around JAN 2020)
+
 Requirements
 ------------
 
@@ -35,7 +40,9 @@ Downloading to appropriatly named folders (each folder’s name is the name of t
     search = cf.Cinefiles(searchfolder=directory)
     search.run()
 
-To rename folders automatically: (this can’t be undone automatically yet)
+To rename folders automatically: see cinefolders the sister project to this (in progress)
+
+(this can’t be undone automatically yet)
 
     import cinefiles as cf
     directory = "/Volumes/HDD/jumble_of_movies"
